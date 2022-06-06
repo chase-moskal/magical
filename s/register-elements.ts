@@ -1,7 +1,7 @@
 
 import {dashify} from "./toolbox/dashify.js"
 
-export function registerComponents(components: {
+export function registerElements(components: {
 		[name: string]: {new(): HTMLElement}
 	}) {
 

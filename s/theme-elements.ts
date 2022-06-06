@@ -5,7 +5,7 @@ import {obtool} from "./toolbox/obtool.js"
 import {mixinStyles} from "./mixins/mixin-styles.js"
 import {Constructor} from "./toolbox/handy-types.js"
 
-export const themeComponents = <
+export const themeElements = <
 		xComponents extends {[key: string]: Constructor<LitElement>}
 	>(
 		theme: CSSResultGroup,

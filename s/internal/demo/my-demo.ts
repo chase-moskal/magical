@@ -1,6 +1,6 @@
 
 import {html, LitElement} from "lit"
-import {ExampleCounter} from "../../virtual-component/examples/example-counter.js"
+import {ExampleCounter} from "../../component/examples/example-counter.js"
 
 export class MyDemo extends LitElement {
 

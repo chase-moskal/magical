@@ -5,9 +5,9 @@ import {AsyncDirective} from "lit/async-directive.js"
 import {Renderer, Sauce, Use} from "./types.js"
 import {debounce} from "../toolbox/debounce/debounce.js"
 
-export function magical<xProps extends any[]>(sauce: Sauce<xProps>) {
+export function component<xProps extends any[]>(sauce: Sauce<xProps>) {
 
-	class MagicDirective extends AsyncDirective {
+	class ComponentDirective extends AsyncDirective {
 
 		#wires = {
 			state: {
@@ -74,5 +74,5 @@ export function magical<xProps extends any[]>(sauce: Sauce<xProps>) {
 		}
 	}
 
-	return <Renderer<xProps>>directive(MagicDirective)
+	return <Renderer<xProps>>directive(ComponentDirective)
 }

@@ -1,8 +1,8 @@
 
 import {html, css} from "lit"
-import {magical} from "../virtual-component.js"
+import {component} from "../component.js"
 
-export const ExampleCounter = magical(use => (start: number) => {
+export const ExampleCounter = component(use => (start: number) => {
 	const [count, setCount] = use.state(start)
 	const increment = () => setCount(count + 1)
 
