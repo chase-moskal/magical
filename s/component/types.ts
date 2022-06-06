@@ -2,8 +2,8 @@
 import {TemplateResult, CSSResultGroup} from "lit"
 
 export interface Use {
-	state<T>(value: T): [T, (value: T) => void]
-	effect(e: (rerender: () => void) => () => void): void
+	state<T>(value: T): [T, (value: T) => void, boolean]
+	setup(e: (rerender: () => void) => () => void): void
 }
 
 export interface Renderer<xProps extends any[]> {

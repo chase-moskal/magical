@@ -5,72 +5,64 @@ import {AsyncDirective} from "lit/async-directive.js"
 import {Renderer, Sauce, Use} from "./types.js"
 import {debounce} from "../toolbox/debounce/debounce.js"
 
+// TODO
+// - detect and forbid infinite loops (setting state in render)
+// - accept state setter callback (previousState => newState)
+// - figure out optional shadow dom and css attachment
+//
+
 export function component<xProps extends any[]>(sauce: Sauce<xProps>) {
-
 	class ComponentDirective extends AsyncDirective {
-
-		#wires = {
-			state: {
-				index: 0,
-				map: new Map<number, any>(),
-			},
-			effect: {
-				index: 0,
-				map: new Map<number, () => void>(),
-			},
-		}
+		#stateMap = new Map<number, [any, any]>() // [currentState, lastState]
+		#setupMap = new Map<number, () => void>()
 
 		#generateUse(...props: xProps): Use {
-			const {state, effect} = this.#wires
+			const stateMap = this.#stateMap
+			const setupMap = this.#setupMap
+			let stateIndex = 0
+			let setupIndex = 0
 			const rerender = debounce(0, () => this.setValue(this.render(...props)))
 			return {
 
-				state<T>(value: T): [T, (value: T) => void] {
-					const {index, map} = state
-					const initialized = map.has(index)
+				state(initialValue) {
+					const initialized = stateMap.has(stateIndex)
 					if (!initialized)
-						map.set(index, value)
-					const currentValue = map.get(index)
-					const set = (newValue: T) => {
+						stateMap.set(stateIndex, [initialValue, undefined])
+					const [currentValue, lastValue] = stateMap.get(stateIndex)!
+					let currentIndex = stateIndex
+					const set = (newValue: any) => {
 						if (newValue !== currentValue) {
-							map.set(index, newValue)
+							stateMap.set(currentIndex, [newValue, currentValue])
 							rerender()
 						}
 					}
-					state.index += 1
-					return [currentValue, set]
+					stateIndex += 1
+					return [currentValue, set, currentValue !== lastValue]
 				},
 
-				effect(e) {
-					const {index, map} = effect
-					const initialized = map.has(index)
+				setup(e) {
+					const initialized = setupMap.has(setupIndex)
 					if (!initialized)
-						map.set(index, e(rerender))
-					effect.index += 1
+						setupMap.set(setupIndex, e(rerender))
+					setupIndex += 1
 				},
 			}
 		}
 
-		#resetUseIndexes() {
-			const {state, effect} = this.#wires
-			state.index = 0
-			effect.index = 0
-		}
-
 		disconnected() {
 			super.disconnected()
-			const {state, effect} = this.#wires
 
-			for (const dispose of effect.map.values())
+			for (const dispose of this.#setupMap.values())
 				dispose()
 
-			effect.map.clear()
-			state.map.clear()
+			this.#setupMap.clear()
+			this.#stateMap.clear()
 		}
 
 		render(...props: xProps) {
-			this.#resetUseIndexes()
-			return sauce(this.#generateUse(...props))(...props)
+			const use = this.#generateUse(...props)
+			const renderer = sauce(use)
+			return renderer(...props)
 		}
 	}
 

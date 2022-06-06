@@ -1,5 +1,5 @@
 
-import {html, css} from "lit"
+import {html} from "lit"
 import {component} from "../component.js"
 
 export const ExampleCounter = component(use => (start: number) => {
