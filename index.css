@@ -18,15 +18,37 @@ body {
 }
 
 body > * + * {
-	margin-top: 1em;
+	margin-top: 2em;
+}
+
+a {
+	color: skyblue;
+	font-weight: bold;
+}
+
+a:is(:hover, :focus) {
+	color: cyan;
+}
+
+a:active {
+	color: magenta;
 }
 
 header {
 	text-align: center;
 }
 
-header em {
+h1 > * {
+	display: block;
+}
+
+h1 em {
 	opacity: 0.5;
+	font-size: 0.5em;
+}
+
+header p {
+	margin: 1em;
 }
 
 my-demo {
