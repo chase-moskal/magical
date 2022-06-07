@@ -13,9 +13,8 @@ export const ExampleCounter = component(use => (start: number) => {
 })
 
 ExampleCounter.css = css`
-	button {
-		color: red;
-	}
+	* { margin: 0; padding: 0; box-sizing: border-box; }
+	button {color: rebeccapurple; padding: 0.2em 0.5em;}
 `
 
 ExampleCounter.shadow = true

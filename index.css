@@ -1,19 +1,37 @@
+
 * {
 	margin: 0;
+	padding: 0;
 	box-sizing: border-box;
 }
 
-body {
-	background-color: #2b2d2e;
+html {
+	background: linear-gradient(12deg, #091c2c, #0c0020);
 	color: antiquewhite;
+	height: 100%;
+}
+
+body {
+	padding: 10vh 10vw;
+	margin: auto;
+	max-width: 45em;
+}
+
+body > * + * {
+	margin-top: 1em;
 }
 
 header {
 	text-align: center;
-	color: wheat;
-	padding: 2rem;
 }
 
 header em {
 	opacity: 0.5;
+}
+
+my-demo {
+	display: block;
+	border: 1px solid #fff4;
+	border-radius: 0.5em;
+	padding: 1em;
 }
