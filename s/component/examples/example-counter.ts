@@ -7,14 +7,29 @@ export const ExampleCounter = component(use => (start: number) => {
 	const increment = () => setCount(previous => previous + 1)
 
 	return html`
-		<p>count ${count}</p>
-		<button @click=${increment}>increment</button>
+		<div>
+			<p>count ${count}</p>
+			<button @click=${increment}>increment</button>
+		</div>
 	`
 })
 
 ExampleCounter.css = css`
-	* { margin: 0; padding: 0; box-sizing: border-box; }
-	button {color: rebeccapurple; padding: 0.2em 0.5em;}
+	* {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	}
+	div {
+		border: 1px solid #fff4;
+		border-radius: 0.5em;
+		padding: 0.5em;
+		max-width: max-content;
+	}
+	button {
+		color: rebeccapurple;
+		padding: 0.2em 0.5em;
+	}
 `
 
 ExampleCounter.shadow = true

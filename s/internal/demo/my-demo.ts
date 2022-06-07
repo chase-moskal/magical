@@ -6,8 +6,9 @@ export class MyDemo extends LitElement {
 
 	render() {
 		return html`
-			<h2>my demo component!</h2>
-			<p>example counter</p>
+			<h2>my demo element</h2>
+			<p>here is an example component:</p>
+			<br/>
 			${ExampleCounter(0)}
 		`
 	}
