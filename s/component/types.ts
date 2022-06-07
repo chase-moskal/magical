@@ -1,13 +1,31 @@
 
-import {TemplateResult, CSSResultGroup} from "lit"
+import {CSSResultGroup, TemplateResult} from "lit"
+
+export type StateMap = Map<number, [any, any]> // // [currentState, previousState]
+export type SetupMap = Map<number, () => void>
+
+export type StateSettingFunction<xValue> = (previousValue: xValue) => xValue
+
+export type ValueOrFunction<xValue> = xValue | ((previousValue: xValue) => xValue)
+
+export type StateSetter<xValue> = (
+	valueOrFunction: xValue | ValueOrFunction<xValue>
+) => void
+
+export type StateTuple<xValue> = [xValue, StateSetter<xValue>, boolean]
 
 export interface Use {
-	state<T>(value: T): [T, (value: T) => void, boolean]
+	state<xValue>(initialValue: xValue): StateTuple<xValue>
 	setup(e: (rerender: () => void) => () => void): void
 }
 
 export interface Renderer<xProps extends any[]> {
 	(...props: xProps): TemplateResult | null
+}
+
+export interface Component<xProps extends any[]> extends Renderer<xProps> {
+	css?: CSSResultGroup
+	shadow: boolean
 }
 
 export type Sauce<xProps extends any[]> = (
