@@ -26,9 +26,12 @@ export function component<xProps extends any[]>(sauce: Sauce<xProps>) {
 
 				state(initialValue) {
 					const initialized = stateMap.has(stateIndex)
+
 					if (!initialized)
 						stateMap.set(stateIndex, [initialValue, undefined])
+
 					const [currentValue, lastValue] = stateMap.get(stateIndex)!
+
 					let currentIndex = stateIndex
 					const set = (callback = (currentValue: any) => {}) => {
 						const newValue = callback(currentValue)
@@ -37,14 +40,17 @@ export function component<xProps extends any[]>(sauce: Sauce<xProps>) {
 							rerender()
 						}
 					}
+
 					stateIndex += 1
 					return [currentValue, set, currentValue !== lastValue]
 				},
 
 				setup(e) {
 					const initialized = setupMap.has(setupIndex)
+
 					if (!initialized)
 						setupMap.set(setupIndex, e(rerender))
+
 					setupIndex += 1
 				},
 			}
