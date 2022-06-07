@@ -2,7 +2,7 @@
 import {directive} from "lit/directive.js"
 import {AsyncDirective} from "lit/async-directive.js"
 
-import {Renderer, Sauce, Use} from "./types.js"
+import {Renderer, Sauce, StateSetter, StateSettingFunction, Use, ValueOrFunction} from "./types.js"
 import {debounce} from "../toolbox/debounce/debounce.js"
 
 // TODO
@@ -13,7 +13,7 @@ import {debounce} from "../toolbox/debounce/debounce.js"
 
 export function component<xProps extends any[]>(sauce: Sauce<xProps>) {
 	class ComponentDirective extends AsyncDirective {
-		#stateMap = new Map<number, [any, any]>() // [currentState, lastState]
+		#stateMap = new Map<number, [any, any]>() // [currentState, previousState]
 		#setupMap = new Map<number, () => void>()
 
 		#generateUse(...props: xProps): Use {
@@ -24,17 +24,21 @@ export function component<xProps extends any[]>(sauce: Sauce<xProps>) {
 			const rerender = debounce(0, () => this.setValue(this.render(...props)))
 			return {
 
-				state(initialValue) {
+				state<xValue>(initialValue: xValue) {
 					const initialized = stateMap.has(stateIndex)
 
 					if (!initialized)
 						stateMap.set(stateIndex, [initialValue, undefined])
 
-					const [currentValue, lastValue] = stateMap.get(stateIndex)!
-
+					const [currentValue, previousValue] = stateMap.get(stateIndex)!
 					let currentIndex = stateIndex
-					const set = (callback = (currentValue: any) => {}) => {
-						const newValue = callback(currentValue)
+
+					const set: StateSetter<xValue> = valueOrFunction => {
+
+						const newValue = typeof valueOrFunction === "function"
+							? (<StateSettingFunction<xValue>>valueOrFunction)(currentValue)
+							: valueOrFunction
+
 						if (newValue !== currentValue) {
 							stateMap.set(currentIndex, [newValue, currentValue])
 							rerender()
@@ -42,7 +46,7 @@ export function component<xProps extends any[]>(sauce: Sauce<xProps>) {
 					}
 
 					stateIndex += 1
-					return [currentValue, set, currentValue !== lastValue]
+					return [currentValue, set, currentValue !== previousValue]
 				},
 
 				setup(e) {

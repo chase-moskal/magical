@@ -1,8 +1,18 @@
 
-import {TemplateResult, CSSResultGroup} from "lit"
+import {TemplateResult} from "lit"
+
+export type StateSettingFunction<xValue> = (previousValue: xValue) => xValue
+
+export type ValueOrFunction<xValue> = xValue | ((previousValue: xValue) => xValue)
+
+export type StateSetter<xValue> = (
+	valueOrFunction: xValue | ValueOrFunction<xValue>
+) => void
+
+export type StateTuple<xValue> = [xValue, StateSetter<xValue>, boolean]
 
 export interface Use {
-	state<T>(value: T): [T, (value: (val: T) => T) => void, boolean]
+	state<xValue>(initialValue: xValue): StateTuple<xValue>
 	setup(e: (rerender: () => void) => () => void): void
 }
 
