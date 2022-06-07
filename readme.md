@@ -4,6 +4,9 @@
 
 *web toolkit for [lit](https://lit.dev/) apps*
 
+🕹️ **live demo page [magical.chasemoskal.com](https://magical.chasemoskal.com/)**  
+📦 `npm install @chasemoskal/magical`  
+
 developing apps with `lit`, we've slowly accumulated handy tools and good patterns we like, that we use in many projects. now all this magical good stuff lives here, so we can maintain it better, and you can benefit!
 
 ✨ `component` for magical virtual components  
