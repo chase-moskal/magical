@@ -1,5 +1,5 @@
 
-import {html} from "lit"
+import {html, css} from "lit"
 import {component} from "../component.js"
 
 export const ExampleCounter = component(use => (start: number) => {
@@ -11,3 +11,11 @@ export const ExampleCounter = component(use => (start: number) => {
 		<button @click=${increment}>increment</button>
 	`
 })
+
+ExampleCounter.css = css`
+	button {
+		color: red;
+	}
+`
+
+ExampleCounter.shadow = true

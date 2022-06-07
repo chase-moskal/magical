@@ -1,18 +1,16 @@
 
-import {directive} from "lit/directive.js"
+import {render} from "lit"
+import {directive, Part} from "lit/directive.js"
 import {AsyncDirective} from "lit/async-directive.js"
 
 import {debounce} from "../toolbox/debounce/debounce.js"
 import {createStateSetter} from "./helpers/create-state-setter.js"
-import {Renderer, Sauce, SetupMap, StateMap, Use} from "./types.js"
+import {Component, Sauce, SetupMap, StateMap, Use} from "./types.js"
 import {initializeAndGetState} from "./helpers/initialize-and-get-state.js"
-
-// TODO
-// - detect and forbid infinite loops (setting state in render)
-// - figure out optional shadow dom and css attachment
-//
+import {createShadowDomWithStyles} from "./helpers/create-shadow-dom-with-styles.js"
 
 export function component<xProps extends any[]>(sauce: Sauce<xProps>) {
+
 	class ComponentDirective extends AsyncDirective {
 		#stateMap: StateMap = new Map<number, [any, any]>()
 		#setupMap: SetupMap = new Map<number, () => void>()
@@ -45,6 +43,20 @@ export function component<xProps extends any[]>(sauce: Sauce<xProps>) {
 			}
 		}
 
+		#root = componentDirective.shadow
+			? createShadowDomWithStyles(componentDirective.css)
+			: undefined
+
+		update(part: Part, props: xProps) {
+			if (this.#root) {
+				render(this.render(...props), this.#root.shadow)
+				return this.#root.element
+			}
+			else {
+				return super.update(part, props)
+			}
+		}
+
 		disconnected() {
 			super.disconnected()
 
@@ -62,5 +74,6 @@ export function component<xProps extends any[]>(sauce: Sauce<xProps>) {
 		}
 	}
 
-	return <Renderer<xProps>>directive(ComponentDirective)
+	const componentDirective = <Component<xProps>>directive(ComponentDirective)
+	return componentDirective
 }
