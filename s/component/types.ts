@@ -1,6 +1,9 @@
 
 import {TemplateResult} from "lit"
 
+export type StateMap = Map<number, [any, any]> // // [currentState, previousState]
+export type SetupMap = Map<number, () => void>
+
 export type StateSettingFunction<xValue> = (previousValue: xValue) => xValue
 
 export type ValueOrFunction<xValue> = xValue | ((previousValue: xValue) => xValue)

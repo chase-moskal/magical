@@ -2,19 +2,20 @@
 import {directive} from "lit/directive.js"
 import {AsyncDirective} from "lit/async-directive.js"
 
-import {Renderer, Sauce, StateSetter, StateSettingFunction, Use, ValueOrFunction} from "./types.js"
 import {debounce} from "../toolbox/debounce/debounce.js"
+import {createStateSetter} from "./helpers/create-state-setter.js"
+import {Renderer, Sauce, SetupMap, StateMap, Use} from "./types.js"
+import {initializeAndGetState} from "./helpers/initialize-and-get-state.js"
 
 // TODO
 // - detect and forbid infinite loops (setting state in render)
-// - accept state setter callback (previousState => newState)
 // - figure out optional shadow dom and css attachment
 //
 
 export function component<xProps extends any[]>(sauce: Sauce<xProps>) {
 	class ComponentDirective extends AsyncDirective {
-		#stateMap = new Map<number, [any, any]>() // [currentState, previousState]
-		#setupMap = new Map<number, () => void>()
+		#stateMap: StateMap = new Map<number, [any, any]>()
+		#setupMap: SetupMap = new Map<number, () => void>()
 
 		#generateUse(...props: xProps): Use {
 			const stateMap = this.#stateMap
@@ -25,26 +26,10 @@ export function component<xProps extends any[]>(sauce: Sauce<xProps>) {
 			return {
 
 				state<xValue>(initialValue: xValue) {
-					const initialized = stateMap.has(stateIndex)
-
-					if (!initialized)
-						stateMap.set(stateIndex, [initialValue, undefined])
-
-					const [currentValue, previousValue] = stateMap.get(stateIndex)!
-					let currentIndex = stateIndex
-
-					const set: StateSetter<xValue> = valueOrFunction => {
-
-						const newValue = typeof valueOrFunction === "function"
-							? (<StateSettingFunction<xValue>>valueOrFunction)(currentValue)
-							: valueOrFunction
-
-						if (newValue !== currentValue) {
-							stateMap.set(currentIndex, [newValue, currentValue])
-							rerender()
-						}
-					}
-
+					const [currentValue, previousValue]
+						= initializeAndGetState({initialValue, stateIndex, stateMap})
+					const set
+						= createStateSetter({stateMap, stateIndex, currentValue, rerender})
 					stateIndex += 1
 					return [currentValue, set, currentValue !== previousValue]
 				},
