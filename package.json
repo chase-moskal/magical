@@ -26,7 +26,9 @@
 		"hooks"
 	],
 	"dependencies": {
-		"es-module-shims": "^1.5.5",
+		"es-module-shims": "^1.5.5"
+	},
+	"peerDependencies": {
 		"lit": "^2.2.4"
 	},
 	"devDependencies": {
