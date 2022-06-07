@@ -2,7 +2,7 @@
 import {TemplateResult, CSSResultGroup} from "lit"
 
 export interface Use {
-	state<T>(value: T): [T, (value: T) => void, boolean]
+	state<T>(value: T): [T, (value: (val: T) => T) => void, boolean]
 	setup(e: (rerender: () => void) => () => void): void
 }
 

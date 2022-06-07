@@ -30,7 +30,8 @@ export function component<xProps extends any[]>(sauce: Sauce<xProps>) {
 						stateMap.set(stateIndex, [initialValue, undefined])
 					const [currentValue, lastValue] = stateMap.get(stateIndex)!
 					let currentIndex = stateIndex
-					const set = (newValue: any) => {
+					const set = (callback = (currentValue: any) => {}) => {
+						const newValue = callback(currentValue)
 						if (newValue !== currentValue) {
 							stateMap.set(currentIndex, [newValue, currentValue])
 							rerender()

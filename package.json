@@ -27,8 +27,7 @@
 	],
 	"dependencies": {
 		"es-module-shims": "^1.5.5",
-		"lit": "^2.2.4",
-		"renraku": "^0.0.0-dev.58"
+		"lit": "^2.2.4"
 	},
 	"devDependencies": {
 		"cynic": "0.1.0-dev.16",
