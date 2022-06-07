@@ -15,12 +15,15 @@ export function component<xProps extends any[]>(sauce: Sauce<xProps>) {
 		#stateMap: StateMap = new Map<number, [any, any]>()
 		#setupMap: SetupMap = new Map<number, () => void>()
 
-		#generateUse(...props: xProps): Use {
+		#generateUse(props: xProps): Use {
 			const stateMap = this.#stateMap
 			const setupMap = this.#setupMap
 			let stateIndex = 0
 			let setupIndex = 0
-			const rerender = debounce(0, () => this.setValue(this.render(...props)))
+			const rerender = debounce(
+				0,
+				() => this.setValue(this.#renderIntoShadowOrNot(props)),
+			)
 			return {
 
 				state<xValue>(initialValue: xValue) {
@@ -47,14 +50,17 @@ export function component<xProps extends any[]>(sauce: Sauce<xProps>) {
 			? createShadowDomWithStyles(componentDirective.css)
 			: undefined
 
-		update(part: Part, props: xProps) {
+		#renderIntoShadowOrNot(props: xProps) {
 			if (this.#root) {
-				render(this.render(...props), this.#root.shadow)
+				render(this.render(...props), this.#root.view)
 				return this.#root.element
 			}
-			else {
-				return super.update(part, props)
-			}
+			else
+				return this.render(...props)
+		}
+
+		update(part: Part, props: xProps) {
+			return this.#renderIntoShadowOrNot(props)
 		}
 
 		disconnected() {
@@ -68,7 +74,7 @@ export function component<xProps extends any[]>(sauce: Sauce<xProps>) {
 		}
 
 		render(...props: xProps) {
-			const use = this.#generateUse(...props)
+			const use = this.#generateUse(props)
 			const renderer = sauce(use)
 			return renderer(...props)
 		}
