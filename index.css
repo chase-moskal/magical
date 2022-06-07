@@ -11,6 +11,10 @@ html {
 	height: 100%;
 }
 
+:not(:defined) {
+	display: none;
+}
+
 body {
 	padding: 10vh 10vw;
 	margin: auto;
