@@ -52,7 +52,7 @@ export function component<xProps extends any[]>(sauce: Sauce<xProps>) {
 
 		#renderIntoShadowOrNot(props: xProps) {
 			if (this.#root) {
-				render(this.render(...props), this.#root.view)
+				render(this.render(...props), this.#root.shadow)
 				return this.#root.element
 			}
 			else
