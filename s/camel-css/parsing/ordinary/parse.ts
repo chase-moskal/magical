@@ -1,45 +1,74 @@
 
 import {Token} from "./types.js"
 import {Expression} from "../../types.js"
+import {CamelCssMissingSelectorError, CamelCssRuleNamePlacementError, CamelCssRuleValuePlacementError, CamelCssStackError} from "../../errors.js"
 
 export function parse(tokens: Token.Any[]): Expression[] {
 	const expressions: Expression[] = []
 
-	if (tokens.length > 0 && tokens[0].type !== Token.Type.Selector)
-		throw new Error("file must start with a selector!")
+	type StackFrame = {
+		selector: undefined | string
+		ruleName: undefined | string
+		rules: {[key: string]: string}
+		childFrames: StackFrame[]
+	}
 
-	let selector: undefined | string
-	let ruleName: undefined | string
-	let rules: {[key: string]: string} = {}
+	let frame: undefined | StackFrame
+	const stack: StackFrame[] = []
 
 	for (const token of tokens) {
 		switch (token.type) {
 
 			case Token.Type.Selector: {
-				selector = token.value
+				frame = {
+					selector: token.value,
+					ruleName: undefined,
+					rules: {},
+					childFrames: [],
+				}
+				stack.push(frame)
 			} break
 
 			case Token.Type.Open: {} break
 
 			case Token.Type.RuleName: {
-				ruleName = token.value
+				if (!frame)
+					throw new CamelCssRuleNamePlacementError(token.value)
+				frame.ruleName = token.value
 			} break
 
 			case Token.Type.RuleValue: {
-				if (ruleName)
-					rules[ruleName] = token.value
-				else
-					throw new Error("rule value cannot precede rule name")
-				ruleName = undefined
+				if (!frame || !frame.ruleName)
+					throw new CamelCssRuleValuePlacementError(token.value)
+				frame.rules[frame.ruleName] = token.value
+				frame.ruleName = undefined
 			} break
 
 			case Token.Type.Close: {
-				if (!selector)
-					throw Error("expression must have a selector!")
-				expressions.push([selector, rules, []])
-				selector = undefined
-				ruleName = undefined
-				rules = {}
+				const completedFrame = stack.pop()
+				const parentFrame = stack.length > 0
+					? stack[stack.length - 1]
+					: undefined
+				frame = parentFrame
+
+				if (!completedFrame)
+					throw new CamelCssStackError()
+
+				if (!completedFrame.selector)
+					throw new CamelCssMissingSelectorError()
+
+				if (parentFrame)
+					parentFrame.childFrames.push(completedFrame)
+				else {
+					function recursiveFrameToExpression(frame: StackFrame): Expression {
+						return [
+							frame.selector!,
+							frame.rules,
+							frame.childFrames.map(recursiveFrameToExpression),
+						]
+					}
+					expressions.push(recursiveFrameToExpression(completedFrame))
+				}
 			} break
 		}
 	}

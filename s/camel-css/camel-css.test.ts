@@ -1,42 +1,59 @@
 
 import {Suite, expect} from "cynic"
+import {compile} from "./compilation/compile.js"
 import {Token} from "./parsing/ordinary/types.js"
-import {tokenize} from "./parsing/ordinary/tokenize.js"
 import {parse} from "./parsing/ordinary/parse.js"
-
-const source = `
-	header {
-		h1 {
-			color: red;
-		}
-	}
-`
+import {tokenize} from "./parsing/ordinary/tokenize.js"
 
 export default <Suite>{
 	"ordinary syntax": {
-		// "tokenize": {
-		// 	async "returns the correct number of tokens"() {
-		// 		const tokens = tokenize(source)
-		// 		expect(tokens.length).equals(8)
-		// 	},
-		// 	async "returns the correct tokens"() {
-		// 		const correctTokenTypes = [
-		// 			Token.Type.Selector,
-		// 			Token.Type.Open,
-		// 			Token.Type.Selector,
-		// 			Token.Type.Open,
-		// 			Token.Type.RuleName,
-		// 			Token.Type.RuleValue,
-		// 			Token.Type.Close,
-		// 			Token.Type.Close,
-		// 		]
-		// 		const tokens = tokenize(source)
-		// 		expect(tokens.length).equals(correctTokenTypes.length)
-		// 		const correct = correctTokenTypes
-		// 			.every((type, index) => tokens[index].type === type)
-		// 		expect(correct).ok()
-		// 	},
-		// },
+		"tokenize": {
+			async "returns the correct number of tokens"() {
+				const tokens = tokenize(`header { h1 { color: red; } }`)
+				expect(tokens.length).equals(8)
+			},
+			async "returns the correct tokens"() {
+				const correctTokenTypes = [
+					Token.Type.Selector,
+					Token.Type.Open,
+					Token.Type.Selector,
+					Token.Type.Open,
+					Token.Type.RuleName,
+					Token.Type.RuleValue,
+					Token.Type.Close,
+					Token.Type.Close,
+				]
+				const tokens = tokenize(`header { h1 { color: red; } }`)
+				expect(tokens.length).equals(correctTokenTypes.length)
+				const correct = correctTokenTypes
+					.every((type, index) => tokens[index].type === type)
+				expect(correct).ok()
+			},
+			async "returns good tokens for complex source"() {
+				const tokens = tokenize(`
+					header {
+						background: yellow;
+						h1 { color: red; }
+					}
+				`)
+				const correctTokenTypes = [
+					Token.Type.Selector,
+					Token.Type.Open,
+					Token.Type.RuleName,
+					Token.Type.RuleValue,
+					Token.Type.Selector,
+					Token.Type.Open,
+					Token.Type.RuleName,
+					Token.Type.RuleValue,
+					Token.Type.Close,
+					Token.Type.Close,
+				]
+				expect(tokens.length).equals(correctTokenTypes.length)
+				const correct = correctTokenTypes
+					.every((type, index) => tokens[index].type === type)
+				expect(correct).ok()
+			},
+		},
 		"parse": {
 			async "flat source code into expressions"() {
 				const tokens = tokenize(`
@@ -71,5 +88,33 @@ export default <Suite>{
 				}
 			},
 		},
+		"compile": {
+			async "nested source code emits proper css"() {
+				const tokens = tokenize(`header { h1 { color: red; } }`)
+				const expressions = parse(tokens)
+				const css = compile(expressions)
+				const expectedResult = `header h1 { color: red; }`
+				expect(strip(css)).equals(strip(expectedResult))
+			},
+			async "parent expression can contain rules and children"() {
+				const tokens = tokenize(`
+					header {
+						background: yellow;
+						h1 { color: red; }
+					}
+				`)
+				const expressions = parse(tokens)
+				const css = compile(expressions)
+				const expectedResult = `
+					header { background: yellow; }
+					header h1 { color: red; }
+				`
+				expect(strip(css)).equals(strip(expectedResult))
+			},
+		},
 	},
+}
+
+function strip(text: string) {
+	return text.trim().replaceAll(/\s+/mg, " ")
 }

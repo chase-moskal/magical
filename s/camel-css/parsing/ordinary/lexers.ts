@@ -4,7 +4,7 @@ import {Lexer, Token} from "./types.js"
 export const lexers: {[key: string]: Lexer} = {
 
 	selector: (source, lastIndex) => {
-		const regex = /([^{}}]+)(?={)/my
+		const regex = /([^{};]+)(?={)/my
 		regex.lastIndex = lastIndex
 		const result = regex.exec(source)
 		if (result) {
