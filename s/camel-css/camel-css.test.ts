@@ -1,6 +1,7 @@
 
-import {Suite, expect, assert} from "cynic"
-import {parseOrdinary, Token, tokenize} from "./parsing/parse-ordinary.js"
+import {Suite, expect} from "cynic"
+import {Token} from "./parsing/ordinary/types.js"
+import {tokenize} from "./parsing/ordinary/tokenize.js"
 
 const source = `
 	header {
@@ -11,19 +12,34 @@ const source = `
 `
 
 export default <Suite>{
-	"parse ordinary syntax": {
-		// async "parse returns an array"() {
-		// 	const result = parseOrdinary(source)
-		// 	assert(Array.isArray(result), "result must be an array")
-		// },
-		async "tokenizer returns a token"() {
-			const tokens = tokenize(source)
-			for (const token of tokens.map(token => ({
-				...token,
-				type: Token.Type[token.type],
-			})))
-				console.log(token)
-			expect(tokens.length).equals(8)
+	"ordinary syntax": {
+		"tokenize": {
+			async "returns the correct number of tokens"() {
+				const tokens = tokenize(source)
+				expect(tokens.length).equals(8)
+			},
+			async "returns the correct tokens"() {
+				const correctTokenTypes = [
+					Token.Type.Selector,
+					Token.Type.Open,
+					Token.Type.Selector,
+					Token.Type.Open,
+					Token.Type.RuleName,
+					Token.Type.RuleValue,
+					Token.Type.Close,
+					Token.Type.Close,
+				]
+				const tokens = tokenize(source)
+				expect(tokens.length).equals(correctTokenTypes.length)
+				const correct = correctTokenTypes
+					.every((type, index) => tokens[index].type === type)
+				expect(correct).ok()
+			},
+		},
+		"parse": {
+			async ""() {
+				
+			},
 		},
 	},
 }
