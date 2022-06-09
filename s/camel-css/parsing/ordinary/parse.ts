@@ -1,7 +1,7 @@
 
 import {Token} from "./types.js"
 import {Expression} from "../../types.js"
-import {CamelCssMissingSelectorError, CamelCssRuleNamePlacementError, CamelCssRuleValuePlacementError, CamelCssStackError} from "../../errors.js"
+import {setupTracedErrors} from "../../errors.js"
 
 export function parse(tokens: Token.Any[]): Expression[] {
 	const expressions: Expression[] = []
@@ -17,6 +17,7 @@ export function parse(tokens: Token.Any[]): Expression[] {
 	const stack: StackFrame[] = []
 
 	for (const token of tokens) {
+		const error = setupTracedErrors(token.trace)
 		switch (token.type) {
 
 			case Token.Type.Selector: {
@@ -33,13 +34,13 @@ export function parse(tokens: Token.Any[]): Expression[] {
 
 			case Token.Type.RuleName: {
 				if (!frame)
-					throw new CamelCssRuleNamePlacementError(token.trace, token.value)
+					throw error.ruleNamePlacement(token.value)
 				frame.ruleName = token.value
 			} break
 
 			case Token.Type.RuleValue: {
 				if (!frame || !frame.ruleName)
-					throw new CamelCssRuleValuePlacementError(token.trace, token.value)
+					throw error.ruleValuePlacement(token.value)
 				frame.rules[frame.ruleName] = token.value
 				frame.ruleName = undefined
 			} break
@@ -52,10 +53,10 @@ export function parse(tokens: Token.Any[]): Expression[] {
 				frame = parentFrame
 
 				if (!completedFrame)
-					throw new CamelCssStackError(token.trace)
+					throw error.stack()
 
 				if (!completedFrame.selector)
-					throw new CamelCssMissingSelectorError(token.trace)
+					throw error.missingSelector()
 
 				if (parentFrame)
 					parentFrame.childFrames.push(completedFrame)

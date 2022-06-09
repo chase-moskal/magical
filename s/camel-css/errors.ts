@@ -31,3 +31,20 @@ export class CamelCssRuleValuePlacementError extends CamelCssError {
 		super(trace, `invalid place for rule value "${ruleValue}"`)
 	}
 }
+
+export const setupTracedErrors = (trace: Trace) => ({
+	error: (message: string) =>
+		new CamelCssError(trace, message),
+
+	missingSelector: () =>
+		new CamelCssMissingSelectorError(trace),
+
+	stack: () =>
+		new CamelCssStackError(trace),
+
+	ruleNamePlacement: (ruleName: string) =>
+		new CamelCssRuleNamePlacementError(trace, ruleName),
+
+	ruleValuePlacement: (ruleValue: string) =>
+		new CamelCssRuleValuePlacementError(trace, ruleValue),
+})
