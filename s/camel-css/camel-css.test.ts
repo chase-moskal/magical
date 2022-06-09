@@ -5,6 +5,15 @@ import {Token} from "./parsing/ordinary/types.js"
 import {parse} from "./parsing/ordinary/parse.js"
 import {tokenize} from "./parsing/ordinary/tokenize.js"
 
+/*
+
+TODO
+- comments
+- child selectors with commas (resolve with :is()?)
+- child selectors for pseudoclasses (:focus, :hover, etc)
+
+*/
+
 export default <Suite>{
 	"ordinary syntax": {
 		"tokenize": {
