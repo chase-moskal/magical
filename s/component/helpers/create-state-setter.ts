@@ -2,22 +2,23 @@
 import {StateMap, StateSetter, StateSettingFunction} from "../types.js"
 
 export function createStateSetter<xValue>({
-		stateMap, stateIndex, currentValue, rerender,
+		stateMap, stateIndex, rerender,
 	}: {
 		stateMap: StateMap
 		stateIndex: number
-		currentValue: xValue
 		rerender: () => void
 	}): StateSetter<xValue> {
 
 	return valueOrFunction => {
 
+		const [previousValue] = stateMap.get(stateIndex)!
+
 		const newValue = typeof valueOrFunction === "function"
-			? (<StateSettingFunction<xValue>>valueOrFunction)(currentValue)
+			? (<StateSettingFunction<xValue>>valueOrFunction)(previousValue)
 			: valueOrFunction
 
-		if (newValue !== currentValue) {
-			stateMap.set(stateIndex, [newValue, currentValue])
+		if (newValue !== previousValue) {
+			stateMap.set(stateIndex, [newValue, previousValue])
 			rerender()
 		}
 	}

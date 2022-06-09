@@ -1,5 +1,5 @@
 
-import {html, TemplateResult} from "lit"
+import {html} from "lit"
 
 import {component} from "../../../component/component.js"
 import {CamelCssError} from "../../../camel-css/errors.js"
@@ -24,8 +24,10 @@ export const CamelCssDemo = component(use => () => {
 		debouncedSetInput(input.value)
 	}
 
+	let time: number | undefined
 	let output = ""
 	let problem = ""
+	const start = performance.now()
 	try {
 		output = camelCss(input)
 	}
@@ -35,6 +37,13 @@ export const CamelCssDemo = component(use => () => {
 			? `${error.name}: ${error.message}`
 			: `unknown error ${error.name}: ${error.message}`
 	}
+	finally {
+		time = performance.now() - start
+	}
+
+	const timeDisplay = time !== undefined
+		? html`<p class=time>${time.toFixed(2)} ms</p>`
+		: null
 
 	return html`
 		<section>
@@ -42,13 +51,14 @@ export const CamelCssDemo = component(use => () => {
 			<div ?data-problem=${!!problem}>
 				<div class=input>
 					<strong>input</strong>
-					<textarea @input=${handleInput}>${input}</textarea>
+					<textarea @input=${handleInput} @keyup=${handleInput}>${input}</textarea>
 				</div>
 				<div class=output>
 					<strong>output</strong>
 					<textarea readonly>${problem ?problem :output.trim()}</textarea>
 				</div>
 			</div>
+			${timeDisplay}
 		</section>
 	`
 })
@@ -99,6 +109,15 @@ CamelCssDemo.css = css`
 
 		.error {
 			color: #ff6f57;
+		}
+
+		.time {
+			font-size: 0.8em;
+			color: white;
+			opacity: 0.5;
+			font-style: italic;
+			text-align: right;
+			padding: 0 1em;
 		}
 	}
 `
