@@ -2,8 +2,8 @@
 	"compilerOptions": {
 		"rootDir": "s",
 		"outDir": "x",
-		"target": "es2019",
-		"lib": ["es2019", "dom"],
+		"target": "es2021",
+		"lib": ["es2021", "dom"],
 		"module": "esnext",
 		"moduleResolution": "node",
 		"experimentalDecorators": true,

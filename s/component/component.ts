@@ -30,7 +30,7 @@ export function component<xProps extends any[]>(sauce: Sauce<xProps>) {
 					const [currentValue, previousValue]
 						= initializeAndGetState({initialValue, stateIndex, stateMap})
 					const set
-						= createStateSetter({stateMap, stateIndex, currentValue, rerender})
+						= createStateSetter<xValue>({stateMap, stateIndex, rerender})
 					stateIndex += 1
 					return [currentValue, set, currentValue !== previousValue]
 				},
