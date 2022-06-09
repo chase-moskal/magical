@@ -1,7 +1,29 @@
 
+export interface Source {
+	code: string
+}
 
-export type Lexer = (source: string, lastIndex: number) =>
-	undefined | {token: Token.Any, lastIndex: number}
+export interface Cursor {
+	index: number
+	line: number
+	column: number
+}
+
+export interface Trace {
+	cursor: Cursor
+	length: number
+}
+
+export type MakeTrace = (preamble: string, valueLength?: number) => Trace
+
+export interface LexerResult<xToken extends Token.Any = Token.Any> {
+	token: xToken
+	newIndex: number
+}
+
+export type Lexer<xToken extends Token.Any> =
+	(source: Source, cursor: Cursor) =>
+		undefined | LexerResult<xToken>
 
 export namespace Token {
 
@@ -15,6 +37,7 @@ export namespace Token {
 
 	export interface Base {
 		type: Type
+		trace: Trace
 	}
 
 	export interface Selector extends Base {
@@ -47,4 +70,14 @@ export namespace Token {
 		| RuleName
 		| RuleValue
 	)
+}
+
+export function asLexers<xLexers extends {[key: string]: Lexer<Token.Any>}>(
+		lexers: xLexers
+	) {
+	return lexers
+}
+
+export function asToken<xToken extends Token.Base>(token: xToken) {
+	return token
 }

@@ -1,91 +1,67 @@
 
-import {Lexer, Token} from "./types.js"
+import {Token} from "./types.js"
+import {makeLexer} from "./utils/make-lexer.js"
 
-export const lexers: {[key: string]: Lexer} = {
+export const lexers = {
 
-	selector: (source, lastIndex) => {
-		const regex = /([^{};]+)(?={)/my
-		regex.lastIndex = lastIndex
-		const result = regex.exec(source)
-		if (result) {
-			const [,value] = result
+	selector: makeLexer<Token.Selector>(
+		/(\s*)([^{};]+)(?={)/my,
+		(match, makeTrace) => {
+			const [, preamble, value] = match
+			const trimmedValue = value.trim()
 			return {
-				lastIndex: regex.lastIndex,
-				token: <Token.Selector>{
-					type: Token.Type.Selector,
-					value: value.trim(),
-				},
+				value: trimmedValue,
+				type: Token.Type.Selector,
+				trace: makeTrace(preamble, trimmedValue.length),
 			}
 		}
-		else
-			return undefined
-	},
+	),
 
-	open: (source, lastIndex) => {
-		const regex = /\s*{/my
-		regex.lastIndex = lastIndex
-		const result = regex.exec(source)
-		if (result) {
+	open: makeLexer<Token.Open>(
+		/(\s*){/my,
+		(match, makeTrace) => {
+			const [, preamble] = match
 			return {
-				lastIndex: regex.lastIndex,
-				token: <Token.Open>{
-					type: Token.Type.Open,
-				},
+				type: Token.Type.Open,
+				trace: makeTrace(preamble),
+			}
+		},
+	),
+
+	close: makeLexer<Token.Close>(
+		/(\s*)}/my,
+		(match, makeTrace) => {
+			const [, preamble] = match
+			return {
+				type: Token.Type.Close,
+				trace: makeTrace(preamble),
+			}
+		},
+	),
+
+	ruleName: makeLexer<Token.RuleName>(
+		/(\s*)([\S]+):/my,
+		(match, makeTrace) => {
+			const [, preamble, value] = match
+			const trimmedValue = value.trim()
+			return {
+				value: trimmedValue,
+				type: Token.Type.RuleName,
+				trace: makeTrace(preamble, trimmedValue.length),
 			}
 		}
-		else
-			return undefined
-	},
+	),
 
-	close: (source, lastIndex) => {
-		const regex = /\s*}/my
-		regex.lastIndex = lastIndex
-		const result = regex.exec(source)
-		if (result) {
+	ruleValue: makeLexer<Token.RuleValue>(
+		/(\s*)([^;}]*)[;}]/my,
+		(match, makeTrace) => {
+			const [, preamble, value] = match
+			const trimmedValue = value.trim()
 			return {
-				lastIndex: regex.lastIndex,
-				token: <Token.Close>{
-					type: Token.Type.Close,
-				},
+				value: trimmedValue,
+				type: Token.Type.RuleValue,
+				trace: makeTrace(preamble, trimmedValue.length),
 			}
 		}
-		else
-			return undefined
-	},
-
-	ruleName: (source, lastIndex) => {
-		const regex = /\s*([\S]+):/my
-		regex.lastIndex = lastIndex
-		const result = regex.exec(source)
-		if (result) {
-			const [,value] = result
-			return {
-				lastIndex: regex.lastIndex,
-				token: <Token.RuleName>{
-					type: Token.Type.RuleName,
-					value: value.trim(),
-				},
-			}
-		}
-		else
-			return undefined
-	},
-
-	ruleValue: (source, lastIndex) => {
-		const regex = /\s*([^;}]*)[;}]/my
-		regex.lastIndex = lastIndex
-		const result = regex.exec(source)
-		if (result) {
-			const [,value] = result
-			return {
-				lastIndex: regex.lastIndex,
-				token: <Token.RuleValue>{
-					type: Token.Type.RuleValue,
-					value: value.trim(),
-				},
-			}
-		}
-		else
-			return undefined
-	},
+	),
 }
