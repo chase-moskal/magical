@@ -7,9 +7,7 @@ export function updateCursor(
 		newIndex: number,
 	) {
 
-	// const part = source.code.slice(cursor.index, newIndex)
 	const linebreaks = (/\n/g.exec(part) ?? []).length
-
 	const line = cursor.line + linebreaks
 	let column = 0
 
@@ -17,9 +15,8 @@ export function updateCursor(
 		const [,lastLine] = /\n(.*)$/.exec(part) ?? []
 		column = 1 + lastLine.length
 	}
-	else {
+	else
 		column = cursor.column + (newIndex - cursor.index)
-	}
 
 	return {
 		line,
