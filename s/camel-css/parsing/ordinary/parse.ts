@@ -33,13 +33,13 @@ export function parse(tokens: Token.Any[]): Expression[] {
 
 			case Token.Type.RuleName: {
 				if (!frame)
-					throw new CamelCssRuleNamePlacementError(token.value)
+					throw new CamelCssRuleNamePlacementError(token.trace, token.value)
 				frame.ruleName = token.value
 			} break
 
 			case Token.Type.RuleValue: {
 				if (!frame || !frame.ruleName)
-					throw new CamelCssRuleValuePlacementError(token.value)
+					throw new CamelCssRuleValuePlacementError(token.trace, token.value)
 				frame.rules[frame.ruleName] = token.value
 				frame.ruleName = undefined
 			} break
@@ -52,10 +52,10 @@ export function parse(tokens: Token.Any[]): Expression[] {
 				frame = parentFrame
 
 				if (!completedFrame)
-					throw new CamelCssStackError()
+					throw new CamelCssStackError(token.trace)
 
 				if (!completedFrame.selector)
-					throw new CamelCssMissingSelectorError()
+					throw new CamelCssMissingSelectorError(token.trace)
 
 				if (parentFrame)
 					parentFrame.childFrames.push(completedFrame)
