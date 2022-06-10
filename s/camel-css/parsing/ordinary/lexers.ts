@@ -53,7 +53,7 @@ export const lexers = {
 	),
 
 	ruleValue: makeLexer<Token.RuleValue>(
-		/(\s*)([^;}]*)[;}]/my,
+		/(\s*)([^;}]+)(;|(?=}))/my,
 		(match, makeTrace) => {
 			const [, preamble, value] = match
 			const trimmedValue = value.trim()

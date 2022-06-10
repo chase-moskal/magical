@@ -3,8 +3,8 @@ import {html} from "lit"
 
 import {component} from "../../../component/component.js"
 import {CamelCssError} from "../../../camel-css/errors.js"
-import {camelCss, css} from "../../../camel-css/camel-css.js"
 import {debounce} from "../../../toolbox/debounce/debounce.js"
+import {css, camelCss} from "../../../camel-css/camel-css-lit.js"
 
 const startingInput = `
 header {

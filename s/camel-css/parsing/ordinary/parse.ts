@@ -1,7 +1,7 @@
 
 import {Token} from "./types.js"
 import {Expression} from "../../types.js"
-import {setupTracedErrors} from "../../errors.js"
+import {CamelCssMissingClosingBraceError, setupTracedErrors} from "../../errors.js"
 
 export function parse(tokens: Token.Any[]): Expression[] {
 	const expressions: Expression[] = []
@@ -53,7 +53,7 @@ export function parse(tokens: Token.Any[]): Expression[] {
 				frame = parentFrame
 
 				if (!completedFrame)
-					throw error.stack()
+					throw error.excessClosingBrace()
 
 				if (!completedFrame.selector)
 					throw error.missingSelector()
@@ -73,6 +73,9 @@ export function parse(tokens: Token.Any[]): Expression[] {
 			} break
 		}
 	}
+
+	if (stack.length > 0)
+		throw new CamelCssMissingClosingBraceError(stack.length)
 
 	return expressions
 }
