@@ -11,13 +11,12 @@ import {tokenize} from "./parsing/ordinary/tokenize.js"
 
 TODO features
 - comments
-- child selectors with commas (resolve with :is()?)
-- child selectors for pseudoclasses (:focus, :hover, etc)
-- "^" caret parent reference feature
-- syntax highlighting
-- media queries
-- import statements
-- animations and keyframes and stuff like that
+- child selectors with commas: h1 {h2,h3 {}} -- compiles to `h1 :is(h2, h3)`
+- "^" caret parent reference feature (^:hover)
+- other css syntax
+	- animations and keyframes and stuff like that
+	- import statements
+	- media queries
 - injection safety
 
 */
