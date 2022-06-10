@@ -15,9 +15,9 @@ export function compile(expressions: Expression[]) {
 		const ruleEntries = Object.entries(rules)
 		if (ruleEntries.length > 0) {
 			const rulesString = ruleEntries
-				.map(([ruleName, ruleValue]) => `${ruleName}: ${ruleValue};`)
+				.map(([ruleName, ruleValue]) => `\t${ruleName}: ${ruleValue};`)
 				.join("\n")
-			css.push(`${compoundSelector} {\n\t${rulesString}\n}`)
+			css.push(`${compoundSelector} {\n${rulesString}\n}`)
 		}
 
 		for (const child of children)
