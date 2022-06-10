@@ -4,26 +4,14 @@ import {makeLexer} from "./utils/make-lexer.js"
 
 export const lexers = {
 
-	selector: makeLexer<Token.Selector>(
-		/(\s*)([^{};]+)(?={)/my,
-		(match, makeTrace) => {
-			const [, preamble, value] = match
-			const trimmedValue = value.trim()
-			return {
-				value: trimmedValue,
-				type: Token.Type.Selector,
-				trace: makeTrace(preamble, trimmedValue.length),
-			}
-		}
-	),
-
 	open: makeLexer<Token.Open>(
-		/(\s*){/my,
+		/(\s*)([^{};]+){/my,
 		(match, makeTrace) => {
-			const [, preamble] = match
+			const [, preamble, selector] = match
 			return {
 				type: Token.Type.Open,
 				trace: makeTrace(preamble),
+				selector: selector.trim(),
 			}
 		},
 	),

@@ -40,13 +40,9 @@ export namespace Token {
 		trace: Trace
 	}
 
-	export interface Selector extends Base {
-		type: Type.Selector
-		value: string
-	}
-
 	export interface Open extends Base {
 		type: Type.Open
+		selector: string
 	}
 
 	export interface Close extends Base {
@@ -64,7 +60,6 @@ export namespace Token {
 	}
 
 	export type Any = (
-		| Selector
 		| Open
 		| Close
 		| RuleName

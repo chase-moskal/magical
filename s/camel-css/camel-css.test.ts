@@ -27,13 +27,11 @@ export default <Suite>{
 		"tokenize": {
 			async "returns the correct number of tokens"() {
 				const tokens = tokenize(`header { h1 { color: red; } }`)
-				expect(tokens.length).equals(8)
+				expect(tokens.length).equals(6)
 			},
 			async "returns the correct tokens"() {
 				const correctTokenTypes = [
-					Token.Type.Selector,
 					Token.Type.Open,
-					Token.Type.Selector,
 					Token.Type.Open,
 					Token.Type.RuleName,
 					Token.Type.RuleValue,
@@ -54,11 +52,9 @@ export default <Suite>{
 					}
 				`)
 				const correctTokenTypes = [
-					Token.Type.Selector,
 					Token.Type.Open,
 					Token.Type.RuleName,
 					Token.Type.RuleValue,
-					Token.Type.Selector,
 					Token.Type.Open,
 					Token.Type.RuleName,
 					Token.Type.RuleValue,

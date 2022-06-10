@@ -20,17 +20,15 @@ export function parse(tokens: Token.Any[]): Expression[] {
 		const error = setupTracedErrors(token.trace)
 		switch (token.type) {
 
-			case Token.Type.Selector: {
+			case Token.Type.Open: {
 				frame = {
-					selector: token.value,
+					selector: token.selector,
 					ruleName: undefined,
 					rules: {},
 					childFrames: [],
 				}
 				stack.push(frame)
 			} break
-
-			case Token.Type.Open: {} break
 
 			case Token.Type.RuleName: {
 				if (!frame)
