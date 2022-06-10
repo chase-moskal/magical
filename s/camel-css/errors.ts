@@ -12,8 +12,8 @@ export class CamelCssError extends Error {
 export class CamelCssMissingClosingBraceError extends CamelCssError {
 	constructor(missingCloses: number) {
 		const message = missingCloses > 1
-			? `missing ${missingCloses} closing braces "}"}`
-			: `missing ${missingCloses} closing brace "}"}`
+			? `missing ${missingCloses} closing braces "}"`
+			: `missing ${missingCloses} closing brace "}"`
 		super(message)
 	}
 }
