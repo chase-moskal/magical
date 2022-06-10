@@ -6,7 +6,7 @@ import {tokenize} from "./parsing/ordinary/tokenize.js"
 export function camelCss(input: string) {
 	const tokens = tokenize(input)
 	const expressions = parse(tokens)
-	return compile(expressions)
+	return [...compile(expressions)].join("")
 }
 
 export function css(

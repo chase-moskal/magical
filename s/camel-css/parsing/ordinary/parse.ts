@@ -3,9 +3,7 @@ import {Token} from "./types.js"
 import {Expression} from "../../types.js"
 import {CamelCssMissingClosingBraceError, setupTracedErrors} from "../../errors.js"
 
-export function parse(tokens: Token.Any[]): Expression[] {
-	const expressions: Expression[] = []
-
+export function* parse(tokens: Iterable<Token.Any>) {
 	type StackFrame = {
 		selector: undefined | string
 		ruleName: undefined | string
@@ -66,7 +64,7 @@ export function parse(tokens: Token.Any[]): Expression[] {
 							frame.childFrames.map(recursiveFrameToExpression),
 						]
 					}
-					expressions.push(recursiveFrameToExpression(completedFrame))
+					yield recursiveFrameToExpression(completedFrame)
 				}
 			} break
 		}
@@ -74,6 +72,4 @@ export function parse(tokens: Token.Any[]): Expression[] {
 
 	if (stack.length > 0)
 		throw new CamelCssMissingClosingBraceError(stack.length)
-
-	return expressions
 }

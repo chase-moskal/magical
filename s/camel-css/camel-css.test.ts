@@ -26,7 +26,7 @@ export default <Suite>{
 	"ordinary syntax": {
 		"tokenize": {
 			async "returns the correct number of tokens"() {
-				const tokens = tokenize(`header { h1 { color: red; } }`)
+				const tokens = [...tokenize(`header { h1 { color: red; } }`)]
 				expect(tokens.length).equals(6)
 			},
 			async "returns the correct tokens"() {
@@ -38,19 +38,19 @@ export default <Suite>{
 					Token.Type.Close,
 					Token.Type.Close,
 				]
-				const tokens = tokenize(`header { h1 { color: red; } }`)
+				const tokens = [...tokenize(`header { h1 { color: red; } }`)]
 				expect(tokens.length).equals(correctTokenTypes.length)
 				const correct = correctTokenTypes
 					.every((type, index) => tokens[index].type === type)
 				expect(correct).ok()
 			},
 			async "returns good tokens for complex source"() {
-				const tokens = tokenize(`
+				const tokens = [...tokenize(`
 					header {
 						background: yellow;
 						h1 { color: red; }
 					}
-				`)
+				`)]
 				const correctTokenTypes = [
 					Token.Type.Open,
 					Token.Type.RuleName,
@@ -78,12 +78,12 @@ export default <Suite>{
 						font-style: italic;
 					}
 				`)
-				const expressions = parse(tokens)
+				const expressions = [...parse(tokens)]
 				expect(expressions.length).equals(2)
 			},
 			async "nested source code into nested expressions"() {
 				const tokens = tokenize(`header { h1 { color: red; } }`)
-				const expressions = parse(tokens)
+				const expressions = [...parse(tokens)]
 				expect(expressions.length).equals(1)
 				{
 					const [expression1] = expressions
@@ -105,7 +105,7 @@ export default <Suite>{
 			async "nested source code emits proper css"() {
 				const tokens = tokenize(`header { h1 { color: red; } }`)
 				const expressions = parse(tokens)
-				const css = compile(expressions)
+				const css = [...compile(expressions)].join("")
 				const expectedResult = `header h1 { color: red; }`
 				expect(strip(css)).equals(strip(expectedResult))
 			},
@@ -115,9 +115,13 @@ export default <Suite>{
 						background: yellow;
 						h1 { color: red; }
 					}
+					h2 {
+						color: yellow;
+					}
 				`)
 				const expressions = parse(tokens)
-				const css = compile(expressions)
+				const cssBlocks = compile(expressions)
+				const css = [...cssBlocks].join("")
 				const expectedResult = `
 					header { background: yellow; }
 					header h1 { color: red; }

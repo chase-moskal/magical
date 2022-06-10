@@ -1,11 +1,10 @@
 
 import {Expression} from "../types.js"
 
-export function compile(expressions: Expression[]) {
+export function* compile(expressions: Iterable<Expression>) {
 
-	const css: string[] = []
-
-	function recurse(expression: Expression, previousSelector: undefined | string) {
+	function recurse(expression: Expression, previousSelector: undefined | string): string[] {
+		let css: string[] = []
 		const [selector, rules, children] = expression
 
 		const compoundSelector = previousSelector
@@ -21,11 +20,15 @@ export function compile(expressions: Expression[]) {
 		}
 
 		for (const child of children)
-			recurse(child, compoundSelector)
+			css = [...css, ...recurse(child, compoundSelector)]
+
+		return css
 	}
 
-	for (const expression of expressions)
-		recurse(expression, undefined)
+	yield "\n"
 
-	return "\n" + css.join("\n") + "\n"
+	for (const expression of expressions)
+		yield "\n" + recurse(expression, undefined).join("\n")
+
+	yield "\n"
 }

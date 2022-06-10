@@ -3,16 +3,14 @@ import {lexers} from "./lexers.js"
 import {Cursor, Source, Token} from "./types.js"
 import {updateCursor} from "./utils/update-cursor.js"
 
-export function tokenize(code: string): Token.Any[] {
-	const tokens: Token.Any[] = []
+export function* tokenize(code: string) {
+	const source: Source = {code}
 	let done = false
 	let cursor: Cursor = {
 		index: 0,
 		line: 1,
 		column: 1,
 	}
-
-	const source: Source = {code}
 
 	while (!done) {
 		let token: undefined | Token.Any
@@ -31,10 +29,8 @@ export function tokenize(code: string): Token.Any[] {
 		}
 
 		if (token)
-			tokens.push(token)
+			yield token
 		else
 			done = true
 	}
-
-	return tokens
 }
