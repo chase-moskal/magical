@@ -115,9 +115,6 @@ export default <Suite>{
 						background: yellow;
 						h1 { color: red; }
 					}
-					h2 {
-						color: yellow;
-					}
 				`)
 				const expressions = parse(tokens)
 				const cssBlocks = compile(expressions)
