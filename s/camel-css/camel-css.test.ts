@@ -141,6 +141,8 @@ export default <Suite>{
 							pink,
 						);
 					} // rofl2
+					h2 // hello
+					{ color: blue; }
 				`))).equals(strip(`
 					h1 {
 						color: red;
@@ -150,6 +152,7 @@ export default <Suite>{
 							pink,
 						);
 					}
+					h2 { color: blue; }
 				`))
 			},
 			async "slash-star comments remain in output"() {
@@ -166,6 +169,13 @@ export default <Suite>{
 							pink,
 						)/*rofl*/;
 					}
+					/*h2,*/
+					h3 { color: blue; }
+					h4,
+					/*h5,*/
+					h6 { color: skyblue; }
+					h7
+					/*h8*/ { color: lime; }
 				`))).equals(strip(`
 					h1 {
 						color: red;
@@ -175,6 +185,10 @@ export default <Suite>{
 							pink,
 						);
 					}
+					h3 { color: blue; }
+					h4,
+					h6 { color: skyblue; }
+					h7 { color: lime; }
 				`))
 			},
 		},
