@@ -45,17 +45,22 @@ export const CamelCssDemo = component(use => () => {
 		? html`<p class=time>${time.toFixed(2)} ms</p>`
 		: null
 
+	const outputOrProblem = problem ?problem :output.trim()
+
 	return html`
 		<section>
 			<h2>camel css demo</h2>
 			<div ?data-problem=${!!problem}>
 				<div class=input>
 					<strong>input</strong>
-					<textarea @input=${handleInput} @keyup=${handleInput}>${input}</textarea>
+					<textarea
+						@input=${handleInput}
+						@keyup=${handleInput}
+						spellcheck=false>${input}</textarea>
 				</div>
 				<div class=output>
 					<strong>output</strong>
-					<textarea readonly>${problem ?problem :output.trim()}</textarea>
+					<textarea readonly spellcheck=false>${outputOrProblem}</textarea>
 				</div>
 			</div>
 			${timeDisplay}
