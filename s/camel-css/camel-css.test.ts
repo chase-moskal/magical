@@ -1,6 +1,7 @@
 
 import {Suite, expect} from "cynic"
 
+import {css} from "./camel-css.js"
 import {compile} from "./compilation/compile.js"
 import {Token} from "./parsing/ordinary/types.js"
 import {parse} from "./parsing/ordinary/parse.js"
@@ -126,6 +127,12 @@ export default <Suite>{
 					header h1 { color: red; }
 				`
 				expect(strip(css)).equals(strip(expectedResult))
+			},
+		},
+		"bugs": {
+			async "fixed: missing semicolon gives blank output"() {
+				expect(strip(css`h1 { color: red }`))
+					.equals(strip(`h1 { color: red; }`))
 			},
 		},
 	},

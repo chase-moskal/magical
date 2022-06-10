@@ -1,6 +1,4 @@
 
-import {CSSResult, unsafeCSS} from "lit"
-
 import {compile} from "./compilation/compile.js"
 import {parse} from "./parsing/ordinary/parse.js"
 import {tokenize} from "./parsing/ordinary/tokenize.js"
@@ -14,7 +12,7 @@ export function camelCss(input: string) {
 export function css(
 		strings: TemplateStringsArray,
 		...values: any[]
-	): CSSResult {
+	): string {
 
 	const input = Array.from(strings).reduce(
 		(previous, current, index) =>
@@ -22,6 +20,5 @@ export function css(
 		""
 	)
 
-	const output = camelCss(input)
-	return unsafeCSS(output)
+	return camelCss(input)
 }
