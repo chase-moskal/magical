@@ -129,13 +129,14 @@ export default <Suite>{
 				expect(strip(css)).equals(strip(expectedResult))
 			},
 		},
+		"errors": {
+			async "error should be thrown on missing close token"() {
+				expect(() => camelCss(`h1 { color: red;`)).throws()
+			},
+		},
 		"bugs": {
 			async "fixed: missing semicolon gives blank output"() {
 				expect(strip(css`h1 { color: red }`))
-					.equals(strip(`h1 { color: red; }`))
-			},
-			async "fixed: missing close token gives blank output"() {
-				expect(strip(camelCss(`h1 { color: red;`)))
 					.equals(strip(`h1 { color: red; }`))
 			},
 		},
