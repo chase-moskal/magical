@@ -12,6 +12,7 @@ import {tokenize} from "./parsing/ordinary/tokenize.js"
 TODO features
 - comments
 - child selectors with commas: h1 {h2,h3 {}} -- compiles to `h1 :is(h2, h3)`
+- strip off trailing commas at end of selectors (camel allows trailing commas, css does not)
 - "^" caret parent reference feature (^:hover)
 - other css syntax
 	- animations and keyframes and stuff like that
