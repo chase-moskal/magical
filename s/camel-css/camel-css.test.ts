@@ -8,14 +8,16 @@ import {tokenize} from "./parsing/ordinary/tokenize.js"
 
 /*
 
-TODO
+TODO features
 - comments
 - child selectors with commas (resolve with :is()?)
 - child selectors for pseudoclasses (:focus, :hover, etc)
+- "^" caret parent reference feature
 - syntax highlighting
 - media queries
 - import statements
 - animations and keyframes and stuff like that
+- injection safety
 
 */
 
