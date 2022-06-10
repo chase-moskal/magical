@@ -8,9 +8,10 @@ export const lexers = {
 		/(\s*)([^{};]+){/my,
 		(match, makeTrace) => {
 			const [, preamble, selector] = match
+			const trimmedSelector = selector.trim()
 			return {
 				type: Token.Type.Open,
-				trace: makeTrace(preamble),
+				trace: makeTrace(preamble, trimmedSelector.length),
 				selector: selector.trim(),
 			}
 		},
@@ -30,12 +31,12 @@ export const lexers = {
 	ruleName: makeLexer<Token.RuleName>(
 		/(\s*)([\S]+):/my,
 		(match, makeTrace) => {
-			const [, preamble, value] = match
-			const trimmedValue = value.trim()
+			const [, preamble, name] = match
+			const trimmedName = name.trim()
 			return {
-				value: trimmedValue,
+				name: trimmedName,
 				type: Token.Type.RuleName,
-				trace: makeTrace(preamble, trimmedValue.length),
+				trace: makeTrace(preamble, trimmedName.length),
 			}
 		}
 	),

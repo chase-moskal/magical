@@ -51,7 +51,7 @@ export namespace Token {
 
 	export interface RuleName extends Base {
 		type: Type.RuleName
-		value: string
+		name: string
 	}
 
 	export interface RuleValue extends Base {

@@ -32,8 +32,8 @@ export function parse(tokens: Token.Any[]): Expression[] {
 
 			case Token.Type.RuleName: {
 				if (!frame)
-					throw error.ruleNamePlacement(token.value)
-				frame.ruleName = token.value
+					throw error.ruleNamePlacement(token.name)
+				frame.ruleName = token.name
 			} break
 
 			case Token.Type.RuleValue: {
