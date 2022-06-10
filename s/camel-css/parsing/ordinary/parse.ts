@@ -22,7 +22,7 @@ export function parse(tokens: Token.Any[]): Expression[] {
 
 			case Token.Type.Open: {
 				frame = {
-					selector: token.selector,
+					selector: token.selector.replaceAll(/\s+/gm, " "),
 					ruleName: undefined,
 					rules: {},
 					childFrames: [],
