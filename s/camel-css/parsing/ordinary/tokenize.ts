@@ -1,11 +1,7 @@
 
 import {lexers} from "./lexers.js"
 import {Cursor, Source, Token} from "./types.js"
-import {makeTokensReadableForDebugging} from "./utils/make-tokens-readable-for-debugging.js"
 import {updateCursor} from "./utils/update-cursor.js"
-
-// TODO
-// - merge selector token into open token
 
 export function tokenize(code: string): Token.Any[] {
 	const tokens: Token.Any[] = []
