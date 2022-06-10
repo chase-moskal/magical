@@ -5,7 +5,7 @@ import {makeLexer} from "./utils/make-lexer.js"
 export const lexers = {
 
 	open: makeLexer<Token.Open>(
-		/(\s*)([^{};]+){/my,
+		/(\s*)([^{};]*){/my,
 		(match, makeTrace) => {
 			const [, preamble, selector] = match
 			const trimmedSelector = selector.trim()
