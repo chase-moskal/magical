@@ -14,7 +14,7 @@ export interface Trace {
 	length: number
 }
 
-export type MakeTrace = (preamble: string, valueLength?: number) => Trace
+export type MakeTrace = (valueLength?: number) => Trace
 
 export interface LexerResult<xToken extends Token.Any = Token.Any> {
 	token: xToken
