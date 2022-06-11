@@ -28,11 +28,11 @@ export type Lexer<xToken extends Token.Any> =
 export namespace Token {
 
 	export enum Type {
-		Selector,
 		Open,
 		Close,
 		RuleName,
 		RuleValue,
+		SlashSlashComment,
 	}
 
 	export interface Base {
@@ -59,11 +59,17 @@ export namespace Token {
 		value: string
 	}
 
+	export interface SlashSlashComment extends Base {
+		type: Type.SlashSlashComment
+		value: string
+	}
+
 	export type Any = (
 		| Open
 		| Close
 		| RuleName
 		| RuleValue
+		| SlashSlashComment
 	)
 }
 

@@ -126,7 +126,7 @@ export default <Suite>{
 				expect(strip(css)).equals(strip(expectedResult))
 			},
 			async "slash-slash comments are stripped away from output"() {
-				expect(camelCss(strip(`
+				const result = strip(camelCss(`
 					// my comment
 					h1 { // lol1
 						// another comment
@@ -141,7 +141,9 @@ export default <Suite>{
 					} // rofl2
 					h2 // hello
 					{ color: blue; }
-				`))).equals(strip(`
+				`))
+
+				expect(result).equals(strip(`
 					h1 {
 						color: red;
 						background: linear-gradient(

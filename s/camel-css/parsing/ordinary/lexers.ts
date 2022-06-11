@@ -4,6 +4,19 @@ import {makeLexer} from "./utils/make-lexer.js"
 
 export const lexers = {
 
+	slashSlashComment: makeLexer<Token.SlashSlashComment>(
+		/(\s*)(\/\/.*)$/my,
+		(match, makeTrace) => {
+			const [, preamble, value] = match
+			const trimmedValue = value.trim()
+			return {
+				value: trimmedValue,
+				type: Token.Type.SlashSlashComment,
+				trace: makeTrace(preamble, trimmedValue.length),
+			}
+		}
+	),
+
 	open: makeLexer<Token.Open>(
 		/(\s*)([^{};]*){/my,
 		(match, makeTrace) => {
