@@ -263,6 +263,35 @@ export default <Suite>{
 					h1 em { color: yellow; }
 				`))
 			},
+			async "media query nesting"() {
+				expect(strip(camelCss(`
+					@media (min-width: 900px) {
+						article {
+							padding: 1rem 3rem;
+							h1 {
+								color: red;
+							}
+						}
+					}
+					header {
+						@media (max-width: 500px) {
+							h2 {
+								color: cyan;
+								em { color: green; }
+							}
+						}
+					}
+				`))).equals(strip(`
+					@media (min-width: 900px) {
+						article { padding: 1rem 3rem; }
+						article h1 { color: red; }
+					}
+					@media (max-width: 500px) {
+						header h2 { color: cyan; }
+						header h2 em { color: green; }
+					}
+				`))
+			},
 		},
 		"errors": {
 			async "error should be thrown on missing close token"() {
