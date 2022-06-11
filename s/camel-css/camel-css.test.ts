@@ -9,12 +9,14 @@ import {tokenize} from "./parsing/ordinary/tokenize.js"
 
 /*
 
+SEE MDN CSS REFERENCE https://developer.mozilla.org/en-US/docs/Web/CSS/Syntax
+
 TODO features
-- comments
+- slash-star comments (that remain in the css output)
 - child selectors with commas: h1 {h2,h3 {}} -- compiles to `h1 :is(h2, h3)`
 - strip off trailing commas at end of selectors (camel allows trailing commas, css does not)
 - "^" caret parent reference feature (^:hover)
-- other css syntax
+- fully featured
 	- animations and keyframes and stuff like that
 	- import statements
 	- media queries
@@ -189,6 +191,76 @@ export default <Suite>{
 					h4,
 					h6 { color: skyblue; }
 					h7 { color: lime; }
+				`))
+			},
+			async "fully-featured snippet"() {
+				expect(strip(camelCss(`
+					@charset "utf-8";
+					@import url("narrow.css") supports(display: flex) screen and (max-width: 400px);
+
+					@font-face {
+						font-family: "Open Sans";
+						src: url("/fonts/OpenSans-Regular-webfont.woff2") format("woff2"),
+							url("/fonts/OpenSans-Regular-webfont.woff") format("woff");
+					}
+
+					@media screen and (min-width: 900px) {
+						article {
+							padding: 1rem 3rem;
+						}
+					}
+
+					@supports (display: flex) {
+						@media screen and (min-width: 900px) {
+							article {
+								display: flex;
+							}
+						}
+					}
+
+					@keyframes slidein {
+						from { transform: translateX(0%); }
+						to { transform: translateX(100%); }
+					}
+
+					// this comment disappears
+					/* this comment remains it the output */
+					h1 {
+						background: black;
+						em { color: yellow; }
+					}
+				`))).equals(strip(`
+					@charset "utf-8";
+					@import url("narrow.css") supports(display: flex) screen and (max-width: 400px);
+
+					@font-face {
+						font-family: "Open Sans";
+						src: url("/fonts/OpenSans-Regular-webfont.woff2") format("woff2"),
+							url("/fonts/OpenSans-Regular-webfont.woff") format("woff");
+					}
+
+					@media screen and (min-width: 900px) {
+						article {
+							padding: 1rem 3rem;
+						}
+					}
+
+					@supports (display: flex) {
+						@media screen and (min-width: 900px) {
+							article {
+								display: flex;
+							}
+						}
+					}
+
+					@keyframes slidein {
+						from { transform: translateX(0%); }
+						to { transform: translateX(100%); }
+					}
+
+					/* this comment remains it the output */
+					h1 { background: black; }
+					h1 em { color: yellow; }
 				`))
 			},
 		},
