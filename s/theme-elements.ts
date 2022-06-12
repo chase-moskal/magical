@@ -2,7 +2,7 @@
 import {LitElement, CSSResultGroup} from "lit"
 
 import {obtool} from "./toolbox/obtool.js"
-import {mixinStyles} from "./mixins/mixin-styles.js"
+import {mixinCss} from "./mixins/mixin-css.js"
 import {Constructor} from "./toolbox/handy-types.js"
 
 export const themeElements = <
@@ -13,5 +13,5 @@ export const themeElements = <
 	) => {
 
 	return obtool(elements)
-		.map(Element => mixinStyles(theme)(Element))
+		.map(Element => mixinCss(theme)(Element))
 }

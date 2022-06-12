@@ -21,7 +21,7 @@ function combineStyles(
 		.filter(notUndefined)
 }
 
-export function mixinStyles(...newStyles: (undefined | CSSResultGroup)[]) {
+export function mixinCss(...newStyles: (undefined | CSSResultGroup)[]) {
 	return function<C extends Constructor<LitElement>>(Base: C): C {
 		return class extends Base {
 			static styles = combineStyles(
