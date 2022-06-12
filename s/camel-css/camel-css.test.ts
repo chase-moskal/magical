@@ -127,6 +127,22 @@ export default <Suite>{
 				`
 				expect(strip(css)).equals(strip(expectedResult))
 			},
+			async "parent reference is properly replaced"() {
+				const tokens = tokenize(`
+					header {
+						background: yellow;
+						^:hover { color: red; }
+					}
+				`)
+				const expressions = parse(tokens)
+				const cssBlocks = compile(expressions)
+				const css = [...cssBlocks].join("")
+				const expectedResult = `
+					header { background: yellow; }
+					header:hover { color: red; }
+				`
+				expect(strip(css)).equals(strip(expectedResult))
+			},
 			async "slash-slash comments are stripped away from output"() {
 				const result = strip(camelCss(`
 					// my comment
