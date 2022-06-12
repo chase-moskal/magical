@@ -12,7 +12,7 @@ export function* compile(expressions: Iterable<Expression>) {
 		const [selector, rules, children] = expression
 
 		const compoundSelector = previousSelector
-			? `${previousSelector} ${selector}`
+			? handleParentReference(`${previousSelector} ${selector}`)
 			: selector
 
 		const ruleEntries = Object.entries(rules)
@@ -40,4 +40,8 @@ export function* compile(expressions: Iterable<Expression>) {
 
 function stripAwayComments(text: string) {
 	return text.replaceAll(/(\s*)(\/\/.*)$/gm, "")
+}
+
+function handleParentReference(groupedSelector: string) {
+	return groupedSelector.replaceAll(/(\s+)*(\^)/gm, "")
 }
