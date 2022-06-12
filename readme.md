@@ -9,7 +9,7 @@
 
 developing apps with `lit`, we've slowly accumulated handy tools and good patterns we like, that we use in many projects. now all this magical good stuff lives here, so we can maintain it better, and you can benefit!
 
-✨ `component` for magical virtual components  
+✨ `view` for magical virtual components  
 ⚙️ `registerElements` and `themeElements` startup patterns  
 🎨 `mixins` for your lit elements  
 🐫 `camel-css` for selector-nesting  

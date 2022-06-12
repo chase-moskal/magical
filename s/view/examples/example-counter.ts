@@ -1,8 +1,8 @@
 
 import {html, css} from "lit"
-import {component} from "../component.js"
+import {view} from "../view.js"
 
-export const ExampleCounter = component(use => (start: number) => {
+export const ExampleCounter = view(use => (start: number) => {
 	const [count, setCount] = use.state(start)
 	const increment = () => setCount(previous => previous + 1)
 

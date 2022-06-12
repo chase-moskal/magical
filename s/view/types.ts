@@ -23,7 +23,7 @@ export interface Renderer<xProps extends any[]> {
 	(...props: xProps): TemplateResult | null
 }
 
-export interface Component<xProps extends any[]> extends Renderer<xProps> {
+export interface View<xProps extends any[]> extends Renderer<xProps> {
 	css?: CSSResultGroup
 	shadow: boolean
 }
