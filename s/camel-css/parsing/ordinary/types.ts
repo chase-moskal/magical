@@ -14,7 +14,7 @@ export interface Trace {
 	length: number
 }
 
-export type MakeTrace = (preamble: string, valueLength?: number) => Trace
+export type MakeTrace = (valueLength?: number) => Trace
 
 export interface LexerResult<xToken extends Token.Any = Token.Any> {
 	token: xToken
@@ -28,11 +28,11 @@ export type Lexer<xToken extends Token.Any> =
 export namespace Token {
 
 	export enum Type {
-		Selector,
 		Open,
 		Close,
 		RuleName,
 		RuleValue,
+		SlashSlashComment,
 	}
 
 	export interface Base {
@@ -59,11 +59,17 @@ export namespace Token {
 		value: string
 	}
 
+	export interface SlashSlashComment extends Base {
+		type: Type.SlashSlashComment
+		value: string
+	}
+
 	export type Any = (
 		| Open
 		| Close
 		| RuleName
 		| RuleValue
+		| SlashSlashComment
 	)
 }
 

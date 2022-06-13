@@ -1,29 +1,34 @@
 
-import {updateCursor} from "./update-cursor.js"
 import {Token, MakeTrace, Lexer} from "../types.js"
+import {runTokenRegex} from "./lexing-details/run-token-regex.js"
+import {runLeadingWhitespaceRegex} from "./lexing-details/handle-leading-whitespace.js"
+import {defineMakeTraceFunction} from "./lexing-details/define-make-trace-function.js"
 
 export function makeLexer<xToken extends Token.Any>(
 		regex: RegExp,
-		tokenize: (match: RegExpMatchArray, makeTrace: MakeTrace) => Token.Any,
+		readToken: (match: RegExpMatchArray, makeTrace: MakeTrace) => Token.Any,
 	): Lexer<xToken> {
 
 	return <Lexer<xToken>>((source, cursor) => {
-		regex.lastIndex = cursor.index
+		let index = cursor.index
+		const setIndex = (newIndex: number) => index = newIndex
 
-		const match = regex.exec(source.code)
-		if (!match)
-			return undefined
+		const leadingWhitespace = runLeadingWhitespaceRegex({
+			source, index, setIndex,
+		})
 
-		const newIndex = regex.lastIndex
-		const makeTrace: MakeTrace = (preamble, valueLength?) => {
-			const subcursor = updateCursor(preamble, cursor, cursor.index + preamble.length)
-			return {
-				cursor: subcursor,
-				length: valueLength ?? (newIndex - subcursor.index),
+		const match = runTokenRegex({
+			source, regex, index, setIndex,
+		})
+
+		return match
+			? {
+				newIndex: index,
+				token: readToken(
+					match,
+					defineMakeTraceFunction({index, cursor, leadingWhitespace}),
+				)
 			}
-		}
-
-		const token = tokenize(match, makeTrace)
-		return {newIndex, token}
+			: undefined
 	})
 }

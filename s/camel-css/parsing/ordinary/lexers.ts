@@ -4,52 +4,64 @@ import {makeLexer} from "./utils/make-lexer.js"
 
 export const lexers = {
 
-	open: makeLexer<Token.Open>(
-		/(\s*)([^{};]*){/my,
+	slashSlashComment: makeLexer<Token.SlashSlashComment>(
+		/(\/\/.*)$/my,
 		(match, makeTrace) => {
-			const [, preamble, selector] = match
+			const [, value] = match
+			const trimmedValue = value.trim()
+			return {
+				type: Token.Type.SlashSlashComment,
+				trace: makeTrace(trimmedValue.length),
+				value: trimmedValue,
+			}
+		}
+	),
+
+	open: makeLexer<Token.Open>(
+		/([^{};]*){/my,
+		(match, makeTrace) => {
+			const [, selector] = match
 			const trimmedSelector = selector.trim()
 			return {
 				type: Token.Type.Open,
-				trace: makeTrace(preamble, trimmedSelector.length),
+				trace: makeTrace(trimmedSelector.length),
 				selector: selector.trim(),
 			}
 		},
 	),
 
 	close: makeLexer<Token.Close>(
-		/(\s*)}/my,
+		/}/my,
 		(match, makeTrace) => {
-			const [, preamble] = match
 			return {
 				type: Token.Type.Close,
-				trace: makeTrace(preamble),
+				trace: makeTrace(1),
 			}
 		},
 	),
 
 	ruleName: makeLexer<Token.RuleName>(
-		/(\s*)([\S]+):/my,
+		/([\S]+):/my,
 		(match, makeTrace) => {
-			const [, preamble, name] = match
+			const [, name] = match
 			const trimmedName = name.trim()
 			return {
-				name: trimmedName,
 				type: Token.Type.RuleName,
-				trace: makeTrace(preamble, trimmedName.length),
+				trace: makeTrace(trimmedName.length),
+				name: trimmedName,
 			}
 		}
 	),
 
 	ruleValue: makeLexer<Token.RuleValue>(
-		/(\s*)([^;}]+)(;|(?=}))/my,
+		/([^;}]+)(;|(?=}))/my,
 		(match, makeTrace) => {
-			const [, preamble, value] = match
+			const [, value] = match
 			const trimmedValue = value.trim()
 			return {
-				value: trimmedValue,
 				type: Token.Type.RuleValue,
-				trace: makeTrace(preamble, trimmedValue.length),
+				trace: makeTrace(trimmedValue.length),
+				value: trimmedValue,
 			}
 		}
 	),
