@@ -5,13 +5,13 @@ import {AsyncDirective} from "lit/async-directive.js"
 
 import {debounce} from "../toolbox/debounce/debounce.js"
 import {createStateSetter} from "./helpers/create-state-setter.js"
-import {Component, Sauce, SetupMap, StateMap, Use} from "./types.js"
+import {View, Sauce, SetupMap, StateMap, Use} from "./types.js"
 import {initializeAndGetState} from "./helpers/initialize-and-get-state.js"
 import {createShadowDomWithStyles} from "./helpers/create-shadow-dom-with-styles.js"
 
-export function component<xProps extends any[]>(sauce: Sauce<xProps>) {
+export function view<xProps extends any[]>(sauce: Sauce<xProps>) {
 
-	class ComponentDirective extends AsyncDirective {
+	class ViewDirective extends AsyncDirective {
 		#stateMap: StateMap = new Map<number, [any, any]>()
 		#setupMap: SetupMap = new Map<number, () => void>()
 
@@ -46,8 +46,8 @@ export function component<xProps extends any[]>(sauce: Sauce<xProps>) {
 			}
 		}
 
-		#root = componentDirective.shadow
-			? createShadowDomWithStyles(componentDirective.css)
+		#root = viewDirective.shadow
+			? createShadowDomWithStyles(viewDirective.css)
 			: undefined
 
 		#renderIntoShadowOrNot(props: xProps) {
@@ -80,6 +80,6 @@ export function component<xProps extends any[]>(sauce: Sauce<xProps>) {
 		}
 	}
 
-	const componentDirective = <Component<xProps>>directive(ComponentDirective)
-	return componentDirective
+	const viewDirective = <View<xProps>>directive(ViewDirective)
+	return viewDirective
 }

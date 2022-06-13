@@ -1,7 +1,7 @@
 
 import {html} from "lit"
 
-import {component} from "../../../component/component.js"
+import {view} from "../../../view/view.js"
 import {CamelCssError} from "../../../camel-css/errors.js"
 import {debounce} from "../../../toolbox/debounce/debounce.js"
 import {css, camelCss} from "../../../camel-css/camel-css-lit.js"
@@ -15,7 +15,7 @@ header {
 }
 `
 
-export const CamelCssDemo = component(use => () => {
+export const CamelCssDemo = view(use => () => {
 	const [input, setInput] = use.state(startingInput.trim())
 	const [debouncedSetInput] = use.state(debounce(250, setInput))
 

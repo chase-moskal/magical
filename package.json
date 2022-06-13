@@ -1,6 +1,6 @@
 {
 	"name": "@chasemoskal/magical",
-	"description": "magical lit element virtual components and more",
+	"description": "web toolkit for lit apps",
 	"version": "0.0.0-dev.0",
 	"license": "MIT",
 	"type": "module",
@@ -20,7 +20,7 @@
 		"test": "cynic node x/tests.test.js"
 	},
 	"keywords": [
-		"components",
+		"views",
 		"lit",
 		"virtual",
 		"hooks"

@@ -1,10 +1,10 @@
 
 import {dashify} from "./toolbox/dashify.js"
 
-export function registerElements(components: {
+export function registerElements(elements: {
 		[name: string]: {new(): HTMLElement}
 	}) {
 
-	for (const [name, component] of Object.entries(components))
-		customElements.define(dashify(name), component)
+	for (const [name, element] of Object.entries(elements))
+		customElements.define(dashify(name), element)
 }

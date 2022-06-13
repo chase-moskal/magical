@@ -12,7 +12,7 @@ const theme = css`
 	}
 `
 
-const components = themeElements(theme, {MyDemo})
-registerElements(components)
+const elements = themeElements(theme, {MyDemo})
+registerElements(elements)
 
 console.log("🪄 magical: successful startup")
