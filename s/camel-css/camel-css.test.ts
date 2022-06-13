@@ -173,141 +173,141 @@ export default <Suite>{
 					h2 { color: blue; }
 				`))
 			},
-			async "slash-star comments remain in output"() {
-				expect(camelCss(strip(`
-					/* here is my comment that stays in the output */
-					h1 {
-						/*
-						these comments are multiline
-						*/
-						color: red;
-						background: linear-gradient(
-							/* lol */to /*hahah*/bottom,
-							magenta,
-							pink,
-						)/*rofl*/;
-					}
-					/*h2,*/
-					h3 { color: blue; }
-					h4,
-					/*h5,*/
-					h6 { color: skyblue; }
-					h7
-					/*h8*/ { color: lime; }
-				`))).equals(strip(`
-					h1 {
-						color: red;
-						background: linear-gradient(
-							to bottom,
-							magenta,
-							pink,
-						);
-					}
-					h3 { color: blue; }
-					h4,
-					h6 { color: skyblue; }
-					h7 { color: lime; }
-				`))
-			},
-			async "fully-featured snippet"() {
-				expect(strip(camelCss(`
-					@charset "utf-8";
-					@import url("narrow.css") supports(display: flex) screen and (max-width: 400px);
+			// async "slash-star comments remain in output"() {
+			// 	expect(camelCss(strip(`
+			// 		/* here is my comment that stays in the output */
+			// 		h1 {
+			// 			/*
+			// 			these comments are multiline
+			// 			*/
+			// 			color: red;
+			// 			background: linear-gradient(
+			// 				/* lol */to /*hahah*/bottom,
+			// 				magenta,
+			// 				pink,
+			// 			)/*rofl*/;
+			// 		}
+			// 		/*h2,*/
+			// 		h3 { color: blue; }
+			// 		h4,
+			// 		/*h5,*/
+			// 		h6 { color: skyblue; }
+			// 		h7
+			// 		/*h8*/ { color: lime; }
+			// 	`))).equals(strip(`
+			// 		h1 {
+			// 			color: red;
+			// 			background: linear-gradient(
+			// 				to bottom,
+			// 				magenta,
+			// 				pink,
+			// 			);
+			// 		}
+			// 		h3 { color: blue; }
+			// 		h4,
+			// 		h6 { color: skyblue; }
+			// 		h7 { color: lime; }
+			// 	`))
+			// },
+			// async "fully-featured snippet"() {
+			// 	expect(strip(camelCss(`
+			// 		@charset "utf-8";
+			// 		@import url("narrow.css") supports(display: flex) screen and (max-width: 400px);
 
-					@font-face {
-						font-family: "Open Sans";
-						src: url("/fonts/OpenSans-Regular-webfont.woff2") format("woff2"),
-							url("/fonts/OpenSans-Regular-webfont.woff") format("woff");
-					}
+			// 		@font-face {
+			// 			font-family: "Open Sans";
+			// 			src: url("/fonts/OpenSans-Regular-webfont.woff2") format("woff2"),
+			// 				url("/fonts/OpenSans-Regular-webfont.woff") format("woff");
+			// 		}
 
-					@media screen and (min-width: 900px) {
-						article {
-							padding: 1rem 3rem;
-						}
-					}
+			// 		@media screen and (min-width: 900px) {
+			// 			article {
+			// 				padding: 1rem 3rem;
+			// 			}
+			// 		}
 
-					@supports (display: flex) {
-						@media screen and (min-width: 900px) {
-							article {
-								display: flex;
-							}
-						}
-					}
+			// 		@supports (display: flex) {
+			// 			@media screen and (min-width: 900px) {
+			// 				article {
+			// 					display: flex;
+			// 				}
+			// 			}
+			// 		}
 
-					@keyframes slidein {
-						from { transform: translateX(0%); }
-						to { transform: translateX(100%); }
-					}
+			// 		@keyframes slidein {
+			// 			from { transform: translateX(0%); }
+			// 			to { transform: translateX(100%); }
+			// 		}
 
-					// this comment disappears
-					/* this comment remains it the output */
-					h1 {
-						background: black;
-						em { color: yellow; }
-					}
-				`))).equals(strip(`
-					@charset "utf-8";
-					@import url("narrow.css") supports(display: flex) screen and (max-width: 400px);
+			// 		// this comment disappears
+			// 		/* this comment remains it the output */
+			// 		h1 {
+			// 			background: black;
+			// 			em { color: yellow; }
+			// 		}
+			// 	`))).equals(strip(`
+			// 		@charset "utf-8";
+			// 		@import url("narrow.css") supports(display: flex) screen and (max-width: 400px);
 
-					@font-face {
-						font-family: "Open Sans";
-						src: url("/fonts/OpenSans-Regular-webfont.woff2") format("woff2"),
-							url("/fonts/OpenSans-Regular-webfont.woff") format("woff");
-					}
+			// 		@font-face {
+			// 			font-family: "Open Sans";
+			// 			src: url("/fonts/OpenSans-Regular-webfont.woff2") format("woff2"),
+			// 				url("/fonts/OpenSans-Regular-webfont.woff") format("woff");
+			// 		}
 
-					@media screen and (min-width: 900px) {
-						article {
-							padding: 1rem 3rem;
-						}
-					}
+			// 		@media screen and (min-width: 900px) {
+			// 			article {
+			// 				padding: 1rem 3rem;
+			// 			}
+			// 		}
 
-					@supports (display: flex) {
-						@media screen and (min-width: 900px) {
-							article {
-								display: flex;
-							}
-						}
-					}
+			// 		@supports (display: flex) {
+			// 			@media screen and (min-width: 900px) {
+			// 				article {
+			// 					display: flex;
+			// 				}
+			// 			}
+			// 		}
 
-					@keyframes slidein {
-						from { transform: translateX(0%); }
-						to { transform: translateX(100%); }
-					}
+			// 		@keyframes slidein {
+			// 			from { transform: translateX(0%); }
+			// 			to { transform: translateX(100%); }
+			// 		}
 
-					/* this comment remains it the output */
-					h1 { background: black; }
-					h1 em { color: yellow; }
-				`))
-			},
-			async "media query nesting"() {
-				expect(strip(camelCss(`
-					@media (min-width: 900px) {
-						article {
-							padding: 1rem 3rem;
-							h1 {
-								color: red;
-							}
-						}
-					}
-					header {
-						@media (max-width: 500px) {
-							h2 {
-								color: cyan;
-								em { color: green; }
-							}
-						}
-					}
-				`))).equals(strip(`
-					@media (min-width: 900px) {
-						article { padding: 1rem 3rem; }
-						article h1 { color: red; }
-					}
-					@media (max-width: 500px) {
-						header h2 { color: cyan; }
-						header h2 em { color: green; }
-					}
-				`))
-			},
+			// 		/* this comment remains it the output */
+			// 		h1 { background: black; }
+			// 		h1 em { color: yellow; }
+			// 	`))
+			// },
+			// async "media query nesting"() {
+			// 	expect(strip(camelCss(`
+			// 		@media (min-width: 900px) {
+			// 			article {
+			// 				padding: 1rem 3rem;
+			// 				h1 {
+			// 					color: red;
+			// 				}
+			// 			}
+			// 		}
+			// 		header {
+			// 			@media (max-width: 500px) {
+			// 				h2 {
+			// 					color: cyan;
+			// 					em { color: green; }
+			// 				}
+			// 			}
+			// 		}
+			// 	`))).equals(strip(`
+			// 		@media (min-width: 900px) {
+			// 			article { padding: 1rem 3rem; }
+			// 			article h1 { color: red; }
+			// 		}
+			// 		@media (max-width: 500px) {
+			// 			header h2 { color: cyan; }
+			// 			header h2 em { color: green; }
+			// 		}
+			// 	`))
+			// },
 		},
 		"errors": {
 			async "error should be thrown on missing close token"() {
