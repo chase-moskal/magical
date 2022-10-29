@@ -11,6 +11,10 @@ div {
 	margin-top: 1.5em;
 }
 
+p {
+	margin-top: 0.8em;
+}
+
 `)
 export class MyDemo extends LitElement {
 
@@ -20,6 +24,10 @@ export class MyDemo extends LitElement {
 			<p>here is an example view:</p>
 			<div>
 				${ExampleCounter(0)}
+			</div>
+			<p>here is an example component:</p>
+			<div>
+				<new-counter start=2></new-counter >
 			</div>
 			<div>
 				${CamelCssDemo()}
