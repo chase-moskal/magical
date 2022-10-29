@@ -1,7 +1,7 @@
 {
 	"name": "@chasemoskal/magical",
 	"description": "web toolkit for lit apps",
-	"version": "0.0.0",
+	"version": "0.0.1",
 	"license": "MIT",
 	"type": "module",
 	"author": "Chase Moskal <chasemoskal@gmail.com>",
@@ -26,7 +26,7 @@
 		"hooks"
 	],
 	"dependencies": {
-		"es-module-shims": "^1.6.1"
+		"es-module-shims": "^1.6.2"
 	},
 	"peerDependencies": {
 		"lit": "^2.4.0"
