@@ -8,7 +8,7 @@ export interface Use<xProps extends {}> extends Elem {
 
 	state<xValue>(
 		initial: xValue | ((element: LitElement & xProps) => xValue)
-	): [xValue, (v: xValue) => void]
+	): [xValue, (v: xValue) => void, () => xValue]
 
 	setup(
 		initializer: (element: LitElement & xProps) => (void | (() => void))
@@ -80,6 +80,7 @@ export function component<xProps extends {}>(
 						this.#stateMap.set(currentCount, newValue)
 						this.requestUpdate()
 					},
+					() => this.#stateMap.get(currentCount),
 				]
 			},
 		}
