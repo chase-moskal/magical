@@ -21,6 +21,20 @@ export function asPropertyDeclarations<xProps extends {}>(
 	return declarations
 }
 
+export function component2<xProps extends {}>(
+		options: {
+			styles?: CSSResult
+			shadow?: boolean
+			properties?: {[P in keyof xProps]: PropertyDeclaration}
+		},
+	) {
+	return {
+		render(renderHtml: (use: Use<xProps>) => TemplateResult) {
+			return component<xProps>(options, renderHtml)
+		},
+	}
+}
+
 export function component<xProps extends {}>(
 		options: {
 			styles?: CSSResult
@@ -40,6 +54,7 @@ export function component<xProps extends {}>(
 		#stateCount = 0
 
 		#stateMap = new Map<number, any>()
+		#setups = new Set<(element: LitElement & xProps) => (void | (() => void))>()
 		#teardowns = new Set<() => void>()
 
 		#use: Use<xProps> = {
@@ -49,9 +64,7 @@ export function component<xProps extends {}>(
 
 			setup: initializer => {
 				if (this.#renderCount === 0) {
-					const teardown = initializer(<any>this)
-					if (teardown)
-						this.#teardowns.add(teardown)
+					this.#setups.add(initializer)
 				}
 			},
 
@@ -83,6 +96,14 @@ export function component<xProps extends {}>(
 					() => this.#stateMap.get(currentCount),
 				]
 			},
+		}
+
+		firstUpdated() {
+			for (const initializer of this.#setups) {
+				const teardown = initializer(<any>this)
+				if (teardown)
+					this.#teardowns.add(teardown)
+			}
 		}
 
 		disconnectedCallback() {
