@@ -9,7 +9,7 @@ export type StateSettingFunction<xValue> = (previousValue: xValue) => xValue
 export type ValueOrFunction<xValue> = xValue | ((previousValue: xValue) => xValue)
 
 export type StateSetter<xValue> = (
-	valueOrFunction: xValue | ValueOrFunction<xValue>
+	valueOrFunction: ValueOrFunction<xValue>
 ) => void
 
 export type StateTuple<xValue> = [xValue, StateSetter<xValue>, boolean]

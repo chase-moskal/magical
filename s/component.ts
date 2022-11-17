@@ -1,14 +1,21 @@
 
 import {elem, Elem} from "./elem.js"
 import {Constructor} from "./types.js"
+import {StateSetter} from "./view/types.js"
 import {LitElement, TemplateResult, PropertyDeclaration, CSSResult} from "lit"
+
+export type StateReturns<xValue> = [
+	xValue,
+	StateSetter<xValue>,
+	() => xValue,
+]
 
 export interface Use<xProps extends {}> extends Elem {
 	element: LitElement & xProps
 
 	state<xValue>(
 		initial: xValue | ((element: LitElement & xProps) => xValue)
-	): [xValue, (v: xValue) => void, () => xValue]
+	): StateReturns<xValue>
 
 	setup(
 		initializer: (element: LitElement & xProps) => (void | (() => void))
@@ -87,9 +94,14 @@ export function component<xProps extends {}>(
 					this.#stateMap.set(currentCount, currentValue)
 				}
 
+				const getter = () => this.#stateMap.get(currentCount)
+
 				return [
 					currentValue,
-					newValue => {
+					valueOrFunction => {
+						const newValue = (typeof valueOrFunction === "function")
+							? (<any>valueOrFunction)(getter())
+							: valueOrFunction
 						this.#stateMap.set(currentCount, newValue)
 						this.requestUpdate()
 					},
