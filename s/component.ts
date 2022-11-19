@@ -10,6 +10,8 @@ export type StateReturns<xValue> = [
 	() => xValue,
 ]
 
+export type Initialize<xProps extends {}> = (e: LitElement & xProps, elem: Elem) => void
+
 export interface Use<xProps extends {}> extends Elem {
 	element: LitElement & xProps
 
@@ -32,6 +34,7 @@ export function component2<xProps extends {}>(
 		options: {
 			styles?: CSSResult
 			shadow?: boolean
+			initialize?: Initialize<xProps>
 			properties?: {[P in keyof xProps]: PropertyDeclaration}
 		},
 	) {
@@ -47,6 +50,7 @@ export function component<xProps extends {}>(
 			styles?: CSSResult
 			shadow?: boolean
 			properties?: {[P in keyof xProps]: PropertyDeclaration}
+			initialize?: Initialize<xProps>
 		},
 		renderHtml: (use: Use<xProps>) => TemplateResult,
 	) {
@@ -63,11 +67,12 @@ export function component<xProps extends {}>(
 		#stateMap = new Map<number, any>()
 		#setups = new Set<(element: LitElement & xProps) => (void | (() => void))>()
 		#teardowns = new Set<() => void>()
+		#elem = elem(this)
 
 		#use: Use<xProps> = {
 			element: <any>this,
 
-			...elem(this),
+			...this.#elem,
 
 			setup: initializer => {
 				if (this.#renderCount === 0) {
@@ -108,6 +113,12 @@ export function component<xProps extends {}>(
 					() => this.#stateMap.get(currentCount),
 				]
 			},
+		}
+
+		constructor() {
+			super()
+			if (options.initialize)
+				options.initialize(<any>this, this.#elem)
 		}
 
 		firstUpdated() {
