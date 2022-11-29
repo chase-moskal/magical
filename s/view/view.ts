@@ -12,17 +12,18 @@ import {createShadowDomWithStyles} from "./helpers/create-shadow-dom-with-styles
 export function view<xProps extends any[]>(sauce: Sauce<xProps>) {
 
 	class ViewDirective extends AsyncDirective {
+		#mostRecentProps = <xProps><unknown>[]
 		#stateMap: StateMap = new Map<number, [any, any]>()
 		#setupMap: SetupMap = new Map<number, () => void>()
 
-		#generateUse(props: xProps): Use {
+		#generateUse(): Use {
 			const stateMap = this.#stateMap
 			const setupMap = this.#setupMap
 			let stateIndex = 0
 			let setupIndex = 0
 			const rerender = debounce(
 				0,
-				() => this.setValue(this.#renderIntoShadowOrNot(props)),
+				() => this.setValue(this.#renderIntoShadowOrNot()),
 			)
 			return {
 
@@ -50,17 +51,18 @@ export function view<xProps extends any[]>(sauce: Sauce<xProps>) {
 			? createShadowDomWithStyles(viewDirective.css)
 			: undefined
 
-		#renderIntoShadowOrNot(props: xProps) {
+		#renderIntoShadowOrNot() {
 			if (this.#root) {
-				render(this.render(...props), this.#root.shadow)
+				render(this.render(), this.#root.shadow)
 				return this.#root.element
 			}
 			else
-				return this.render(...props)
+				return this.render()
 		}
 
 		update(part: Part, props: xProps) {
-			return this.#renderIntoShadowOrNot(props)
+			this.#mostRecentProps = props
+			return this.#renderIntoShadowOrNot()
 		}
 
 		disconnected() {
@@ -73,10 +75,10 @@ export function view<xProps extends any[]>(sauce: Sauce<xProps>) {
 			this.#stateMap.clear()
 		}
 
-		render(...props: xProps) {
-			const use = this.#generateUse(props)
+		render() {
+			const use = this.#generateUse()
 			const renderer = sauce(use)
-			return renderer(...props)
+			return renderer(...this.#mostRecentProps)
 		}
 	}
 
