@@ -30,136 +30,118 @@ export function asPropertyDeclarations<xProps extends {}>(
 	return declarations
 }
 
-export function component2<xProps extends {}>(
-		options: {
-			styles?: CSSResult
-			shadow?: boolean
-			initialize?: Initialize<xProps>
-			properties?: {[P in keyof xProps]: PropertyDeclaration}
-		},
-	) {
-	return {
-		render(renderHtml: (use: Use<xProps>) => TemplateResult) {
-			return component<xProps>(options, renderHtml)
-		},
-	}
-}
+export const element = <xProps extends {}>(options: {
+		styles?: CSSResult
+		shadow?: boolean
+		initialize?: Initialize<xProps>
+		properties?: {[P in keyof xProps]: PropertyDeclaration}
+	}) => ({
+		render: (renderHtml: (use: Use<xProps>) => TemplateResult) =>
+			<Constructor<LitElement & xProps>><any>
+				class extends LitElement
+	{
 
-export function component<xProps extends {}>(
-		options: {
-			styles?: CSSResult
-			shadow?: boolean
-			properties?: {[P in keyof xProps]: PropertyDeclaration}
-			initialize?: Initialize<xProps>
-		},
-		renderHtml: (use: Use<xProps>) => TemplateResult,
-	) {
+	static readonly styles = options.styles
+	static readonly properties = options.properties ?? {}
 
-	type xConstructor = Constructor<LitElement & xProps>
+	#renderCount = 0
+	#stateCount = 0
 
-	return <xConstructor><any>class extends LitElement {
-		static readonly styles = options.styles
-		static readonly properties = options.properties ?? {}
+	#stateMap = new Map<number, any>()
+	#setups = new Set<(element: LitElement & xProps) => (void | (() => void))>()
+	#teardowns = new Set<() => void>()
+	#elem = elem(this)
 
-		#renderCount = 0
-		#stateCount = 0
+	#use: Use<xProps> = {
+		element: <any>this,
 
-		#stateMap = new Map<number, any>()
-		#setups = new Set<(element: LitElement & xProps) => (void | (() => void))>()
-		#teardowns = new Set<() => void>()
-		#elem = elem(this)
+		...this.#elem,
 
-		#use: Use<xProps> = {
-			element: <any>this,
-
-			...this.#elem,
-
-			setup: initializer => {
-				if (this.#renderCount === 0) {
-					this.#setups.add(initializer)
-				}
-			},
-
-			state: initial => {
-				const currentCount = this.#stateCount
-				this.#stateCount += 1
-
-				let currentValue: any
-				const alreadySet = this.#stateMap.has(currentCount)
-
-				if (alreadySet)
-					currentValue = this.#stateMap.get(currentCount)
-
-				else {
-					currentValue = (
-						(typeof initial === "function")
-							? (<any>initial)(this)
-							: initial
-					)
-					this.#stateMap.set(currentCount, currentValue)
-				}
-
-				const getter = () => this.#stateMap.get(currentCount)
-
-				return [
-					currentValue,
-					valueOrFunction => {
-						const newValue = (typeof valueOrFunction === "function")
-							? (<any>valueOrFunction)(getter())
-							: valueOrFunction
-						this.#stateMap.set(currentCount, newValue)
-						this.requestUpdate()
-					},
-					() => this.#stateMap.get(currentCount),
-				]
-			},
-		}
-
-		constructor() {
-			super()
-			if (options.initialize)
-				options.initialize(<any>this, this.#elem)
-		}
-
-		firstUpdated() {
-			for (const initializer of this.#setups) {
-				const teardown = initializer(<any>this)
-				if (teardown)
-					this.#teardowns.add(teardown)
+		setup: initializer => {
+			if (this.#renderCount === 0) {
+				this.#setups.add(initializer)
 			}
-		}
+		},
 
-		disconnectedCallback() {
-			for (const teardown of this.#teardowns)
-				teardown()
-			this.#teardowns.clear()
-			this.#renderCount = 0
-			super.disconnectedCallback()
-		}
+		state: initial => {
+			const currentCount = this.#stateCount
+			this.#stateCount += 1
 
-		createRenderRoot() {
-			if (options.shadow ?? true)
-				return super.createRenderRoot()
+			let currentValue: any
+			const alreadySet = this.#stateMap.has(currentCount)
+
+			if (alreadySet)
+				currentValue = this.#stateMap.get(currentCount)
 
 			else {
-				const root = document.createElement("div")
-				this.appendChild(root)
-
-				if (options.styles) {
-					const style = document.createElement("style")
-					style.textContent = options.styles.cssText
-					this.appendChild(style)
-				}
-
-				return root
+				currentValue = (
+					(typeof initial === "function")
+						? (<any>initial)(this)
+						: initial
+				)
+				this.#stateMap.set(currentCount, currentValue)
 			}
-		}
 
-		render() {
-			this.#stateCount = 0
-			const result = renderHtml(this.#use)
-			this.#renderCount += 1
-			return result
+			const getter = () => this.#stateMap.get(currentCount)
+
+			return [
+				currentValue,
+				valueOrFunction => {
+					const newValue = (typeof valueOrFunction === "function")
+						? (<any>valueOrFunction)(getter())
+						: valueOrFunction
+					this.#stateMap.set(currentCount, newValue)
+					this.requestUpdate()
+				},
+				() => this.#stateMap.get(currentCount),
+			]
+		},
+	}
+
+	constructor() {
+		super()
+		if (options.initialize)
+			options.initialize(<any>this, this.#elem)
+	}
+
+	firstUpdated() {
+		for (const initializer of this.#setups) {
+			const teardown = initializer(<any>this)
+			if (teardown)
+				this.#teardowns.add(teardown)
 		}
 	}
-}
+
+	disconnectedCallback() {
+		for (const teardown of this.#teardowns)
+			teardown()
+		this.#teardowns.clear()
+		this.#renderCount = 0
+		super.disconnectedCallback()
+	}
+
+	createRenderRoot() {
+		if (options.shadow ?? true)
+			return super.createRenderRoot()
+
+		else {
+			const root = document.createElement("div")
+			this.appendChild(root)
+
+			if (options.styles) {
+				const style = document.createElement("style")
+				style.textContent = options.styles.cssText
+				this.appendChild(style)
+			}
+
+			return root
+		}
+	}
+
+	render() {
+		this.#stateCount = 0
+		const result = renderHtml(this.#use)
+		this.#renderCount += 1
+		return result
+	}
+}})

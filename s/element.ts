@@ -1,2 +1,2 @@
 
-export {component2 as element} from "./component.js"
+export {element} from "./component.js"
