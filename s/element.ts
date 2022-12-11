@@ -12,7 +12,7 @@ export type StateReturns<xValue> = [
 
 export type Initialize<xProps extends {}> = (e: LitElement & xProps, elem: Elem) => void
 
-export interface Use<xProps extends {}> extends Elem {
+export interface UseElement<xProps extends {}> extends Elem {
 	element: LitElement & xProps
 
 	state<xValue>(
@@ -36,7 +36,7 @@ export const element = <xProps extends {}>(options: {
 		initialize?: Initialize<xProps>
 		properties?: {[P in keyof xProps]: PropertyDeclaration}
 	}) => ({
-		render: (renderHtml: (use: Use<xProps>) => TemplateResult) =>
+		render: (renderHtml: (use: UseElement<xProps>) => TemplateResult) =>
 			<Constructor<LitElement & xProps>><any>
 				class extends LitElement
 	{
@@ -52,7 +52,7 @@ export const element = <xProps extends {}>(options: {
 	#teardowns = new Set<() => void>()
 	#elem = elem(this)
 
-	#use: Use<xProps> = {
+	#use: UseElement<xProps> = {
 		element: <any>this,
 
 		...this.#elem,

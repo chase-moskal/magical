@@ -1,6 +1,6 @@
 
 import {html, css} from "lit"
-import {element} from "../../component.js"
+import {element} from "../../element.js"
 
 export const ExampleCounter2 = element<{start: number}>({
 		shadow: true,

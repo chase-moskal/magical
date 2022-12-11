@@ -4,7 +4,7 @@ import {directive, Part} from "lit/directive.js"
 import {AsyncDirective} from "lit/async-directive.js"
 
 import {debounce} from "../toolbox/debounce/debounce.js"
-import {View, Sauce, SetupMap, StateMap, Use} from "./types.js"
+import {View, Sauce, SetupMap, StateMap, ViewUse} from "./types.js"
 import {createStateSetter} from "./helpers/create-state-setter.js"
 import {initializeAndGetState} from "./helpers/initialize-and-get-state.js"
 import {createShadowDomWithStyles} from "./helpers/create-shadow-dom-with-styles.js"
@@ -16,7 +16,7 @@ export function view<xProps extends any[]>(sauce: Sauce<xProps>) {
 		#stateMap: StateMap = new Map<number, [any, any]>()
 		#setupMap: SetupMap = new Map<number, () => void>()
 
-		#generateUse(): Use {
+		#generateUse(): ViewUse {
 			const stateMap = this.#stateMap
 			const setupMap = this.#setupMap
 			let stateIndex = 0

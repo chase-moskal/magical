@@ -1,7 +1,7 @@
 
 import {CSSResultGroup, TemplateResult} from "lit"
 
-export type StateMap = Map<number, [any, any]> // // [currentState, previousState]
+export type StateMap = Map<number, [any, any]> // [currentState, previousState]
 export type SetupMap = Map<number, () => void>
 
 export type StateSettingFunction<xValue> = (previousValue: xValue) => xValue
@@ -29,7 +29,7 @@ export type StateTuple<xValue> = [
 	xValue,
 ]
 
-export interface Use {
+export interface ViewUse {
 	state<xValue>(initialValue: xValue): StateTuple<xValue>
 	setup(e: (rerender: () => void) => () => void): void
 }
@@ -44,5 +44,5 @@ export interface View<xProps extends any[]> extends Renderer<xProps> {
 }
 
 export type Sauce<xProps extends any[]> = (
-	(use: Use) => Renderer<xProps>
+	(use: ViewUse) => Renderer<xProps>
 )
