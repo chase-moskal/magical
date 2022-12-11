@@ -12,7 +12,22 @@ export type StateSetter<xValue> = (
 	valueOrFunction: ValueOrFunction<xValue>
 ) => void
 
-export type StateTuple<xValue> = [xValue, StateSetter<xValue>, boolean]
+export type StateGetter<xValue> = () => xValue
+
+export type StateTuple<xValue> = [
+
+	// current value
+	xValue,
+
+	// setter
+	StateSetter<xValue>,
+
+	// getter
+	StateGetter<xValue>,
+
+	// previous value
+	xValue,
+]
 
 export interface Use {
 	state<xValue>(initialValue: xValue): StateTuple<xValue>
