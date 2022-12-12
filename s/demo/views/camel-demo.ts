@@ -16,7 +16,7 @@ header {
 }
 `
 
-export const CamelCssDemo = view({
+export const CamelDemo = view({
 		shadow: true,
 		styles: camelDemoCss,
 	}).render(use => () => {
@@ -54,7 +54,6 @@ export const CamelCssDemo = view({
 
 	return html`
 		<section>
-			<h2>camel css demo</h2>
 			<div ?data-problem=${!!problem}>
 				<div class=input>
 					<strong>input</strong>
