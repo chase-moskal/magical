@@ -3,7 +3,7 @@ import {EventBase} from "./event/event-base.js"
 
 export function MagicEvent<D>(name: string) {
 	return class extends EventBase<D> {
-		static eventName = name
+		static readonly eventName = name
 
 		static target = (target: EventTarget) => ({
 			dispatch: (

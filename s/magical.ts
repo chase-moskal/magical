@@ -1,10 +1,4 @@
 
-export * from "./element.js"
-export * from  "./element/types/initialize.js"
-export * from  "./element/types/properties.js"
-export * from  "./element/types/setup-initializer.js"
-export * from  "./element/types/use-element.js"
-
 export * from "./event.js"
 
 export * from "./view/view.js"
