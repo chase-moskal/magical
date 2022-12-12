@@ -3,11 +3,11 @@ import {CSSResultGroup, render} from "lit"
 import {directive, Part} from "lit/directive.js"
 import {AsyncDirective} from "lit/async-directive.js"
 
-import {debounce} from "../toolbox/debounce/debounce.js"
-import {createStateSetter} from "./helpers/create-state-setter.js"
-import {View, Sauce, SetupMap, StateMap, ViewUse} from "./types.js"
-import {initializeAndGetState} from "./helpers/initialize-and-get-state.js"
-import {createShadowDomWithStyles} from "./helpers/create-shadow-dom-with-styles.js"
+import {debounce} from "./toolbox/debounce/debounce.js"
+import {createStateSetter} from "./view/create-state-setter.js"
+import {View, Sauce, SetupMap, StateMap, ViewUse} from "./view/types.js"
+import {initializeAndGetState} from "./view/initialize-and-get-state.js"
+import {createShadowDomWithStyles} from "./view/create-shadow-dom-with-styles.js"
 
 export const view = <xProps extends any[]>({styles, shadow = true}: {
 		shadow?: boolean

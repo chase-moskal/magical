@@ -1,7 +1,7 @@
 
 export * from "./event.js"
 
-export * from "./view/view.js"
+export * from "./view.js"
 export * from "./view/types.js"
 
 export * from "./toolbox/handy-types.js"

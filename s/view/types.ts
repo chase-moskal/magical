@@ -1,5 +1,5 @@
 
-import {CSSResultGroup, TemplateResult} from "lit"
+import {TemplateResult} from "lit"
 
 export type StateMap = Map<number, [any, any]> // [currentState, previousState]
 export type SetupMap = Map<number, () => void>
@@ -38,10 +38,7 @@ export interface Renderer<xProps extends any[]> {
 	(...props: xProps): TemplateResult | void
 }
 
-export interface View<xProps extends any[]> extends Renderer<xProps> {
-	css?: CSSResultGroup
-	shadow: boolean
-}
+export interface View<xProps extends any[]> extends Renderer<xProps> {}
 
 export type Sauce<xProps extends any[]> = (
 	(use: ViewUse) => Renderer<xProps>

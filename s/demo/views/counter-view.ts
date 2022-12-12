@@ -1,6 +1,6 @@
 
 import {html} from "lit"
-import {view} from "../../view/view.js"
+import {view} from "../../view.js"
 import counterStylesCss from "../styles/counter-styles.css.js"
 
 export const CounterView = view({

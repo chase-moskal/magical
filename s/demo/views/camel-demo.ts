@@ -1,7 +1,7 @@
 
 import {html} from "lit"
 
-import {view} from "../../view/view.js"
+import {view} from "../../view.js"
 import camelDemoCss from "../styles/camel-demo.css.js"
 import {CamelCssError} from "../../camel-css/errors.js"
 import {debounce} from "../../toolbox/debounce/debounce.js"

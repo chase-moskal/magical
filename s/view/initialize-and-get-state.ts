@@ -1,5 +1,5 @@
 
-import {StateMap} from "../types.js"
+import {StateMap} from "./types.js"
 
 export function initializeAndGetState({
 		initial,
