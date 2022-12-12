@@ -1,15 +1,18 @@
 
-import {render} from "lit"
+import {CSSResultGroup, render} from "lit"
 import {directive, Part} from "lit/directive.js"
 import {AsyncDirective} from "lit/async-directive.js"
 
 import {debounce} from "../toolbox/debounce/debounce.js"
-import {View, Sauce, SetupMap, StateMap, ViewUse} from "./types.js"
 import {createStateSetter} from "./helpers/create-state-setter.js"
+import {View, Sauce, SetupMap, StateMap, ViewUse} from "./types.js"
 import {initializeAndGetState} from "./helpers/initialize-and-get-state.js"
 import {createShadowDomWithStyles} from "./helpers/create-shadow-dom-with-styles.js"
 
-export function view<xProps extends any[]>(sauce: Sauce<xProps>) {
+export const view = <xProps extends any[]>({styles, shadow = true}: {
+		shadow?: boolean
+		styles?: CSSResultGroup
+	} = {}) => ({render(sauce: Sauce<xProps>) {
 
 	class ViewDirective extends AsyncDirective {
 		#mostRecentProps = <xProps><unknown>[]
@@ -63,8 +66,8 @@ export function view<xProps extends any[]>(sauce: Sauce<xProps>) {
 			}
 		}
 
-		#root = viewDirective.shadow
-			? createShadowDomWithStyles(viewDirective.css)
+		#root = shadow
+			? createShadowDomWithStyles(styles)
 			: undefined
 
 		#renderIntoShadowOrNot() {
@@ -100,4 +103,4 @@ export function view<xProps extends any[]>(sauce: Sauce<xProps>) {
 
 	const viewDirective = <View<xProps>>directive(ViewDirective)
 	return viewDirective
-}
+}})
