@@ -2,9 +2,9 @@
 import {LitElement, TemplateResult} from "lit"
 
 import {elem} from "./elem.js"
-import {UseElement} from "./elephant/types/use-element.js"
-import {SetupInitializer} from "./elephant/types/setup-initializer.js"
-import {setupUseObjectForElement} from "./elephant/setup-use-object-for-element.js"
+import {UseElement} from "./element/types/use-element.js"
+import {SetupInitializer} from "./element/types/setup-initializer.js"
+import {setupUseObjectForElement} from "./element/setup-use-object-for-element.js"
 
 export class MagicElement extends LitElement {
 	protected realize(use: UseElement<typeof this>): TemplateResult | void {}
