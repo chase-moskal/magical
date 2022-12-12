@@ -7,8 +7,6 @@ import {MagicEvent} from "../../event.js"
 import {mixinCss} from "../../mixins/mixin-css.js"
 import counterStylesCss from "../styles/counter-styles.css.js"
 
-export class CoolEvent extends MagicEvent<{cool: number}>("cool") {}
-
 @mixinCss(counterStylesCss)
 export class CounterElement extends MagicElement {
 
@@ -19,13 +17,7 @@ export class CounterElement extends MagicElement {
 		const {use} = this
 		const [count, setCount] = use.state(use.element.start)
 
-		const increment = () => {
-			const value = count + 1
-			setCount(value)
-			CoolEvent
-				.target(this)
-				.dispatch({cool: value})
-		}
+		const increment = () => setCount(count + 1)
 		const reset = () => setCount(use.element.start)
 
 		return html`
