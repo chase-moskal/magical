@@ -1,22 +1,8 @@
 
-const defaultDispatchOptions: Omit<CustomEventInit, "detail"> = {
-	bubbles: true,
-	composed: true,
-	cancelable: true,
-}
+import {EventBase} from "./event/event-base.js"
 
-export type DispatchOptions = Omit<CustomEventInit, "detail">
-
-export class MagicalEvent<xDetail> extends CustomEvent<xDetail> {
-	static eventName: string
-
-	constructor(name: string, detail: xDetail, options: Omit<CustomEventInit, "detail"> = defaultDispatchOptions) {
-		super(name, {...options, detail})
-	}
-}
-
-export function event<D>(name: string) {
-	return class extends MagicalEvent<D> {
+export function MagicEvent<D>(name: string) {
+	return class extends EventBase<D> {
 		static eventName = name
 
 		static target = (target: EventTarget) => ({
@@ -27,7 +13,7 @@ export function event<D>(name: string) {
 				target.dispatchEvent(new this(detail, options)),
 
 			listen: (
-					listener: (e: MagicalEvent<D>) => void,
+					listener: (e: EventBase<D>) => void,
 					options?: boolean | AddEventListenerOptions,
 				) => {
 				target.addEventListener(name, <any>listener, options)
