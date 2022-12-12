@@ -1,6 +1,10 @@
 
 export * from "./event.js"
 
+export * from "./element.js"
+export * from "./element/types/use-element.js"
+export * from "./element/types/setup-initializer.js"
+
 export * from "./view.js"
 export * from "./view/types.js"
 
