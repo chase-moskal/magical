@@ -1,5 +1,6 @@
 
 import {EventBase} from "./event/event-base.js"
+import {DispatchOptions} from "./event/types/dispatch-options.js"
 
 export function MagicEvent<D>(name: string) {
 	return class extends EventBase<D> {
@@ -8,7 +9,7 @@ export function MagicEvent<D>(name: string) {
 		static target = (target: EventTarget) => ({
 			dispatch: (
 					detail: D,
-					options?: Omit<CustomEventInit, "detail">,
+					options?: DispatchOptions,
 				) =>
 				target.dispatchEvent(new this(detail, options)),
 
@@ -21,7 +22,7 @@ export function MagicEvent<D>(name: string) {
 			},
 		})
 
-		constructor(detail: D, options?: Omit<CustomEventInit, "detail">) {
+		constructor(detail: D, options?: DispatchOptions) {
 			super(name, detail, options)
 		}
 	}

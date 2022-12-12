@@ -7,7 +7,9 @@ import {SetupInitializer} from "./element/types/setup-initializer.js"
 import {setupUseObjectForElement} from "./element/setup-use-object-for-element.js"
 
 export class MagicElement extends LitElement {
-	protected realize(use: UseElement<typeof this>): TemplateResult | void {}
+	protected realize(
+		use: UseElement<typeof this>
+	): TemplateResult | void {}
 	
 	#renderCount = 0
 	#stateCount = 0
