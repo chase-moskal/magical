@@ -2,7 +2,7 @@
 import {LitElement, TemplateResult, CSSResult} from "lit"
 
 import {elem} from "./elem.js"
-import {Constructor} from "./types.js"
+import {Constructor} from "./toolbox/handy-types.js"
 import {Initialize} from "./element/types/initialize.js"
 import {Properties} from "./element/types/properties.js"
 import {UseElement} from "./element/types/use-element.js"
