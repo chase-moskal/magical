@@ -17,7 +17,7 @@ header {
 
 export const CamelCssDemo = view(use => () => {
 	const [input, setInput] = use.state(startingInput.trim())
-	const [debouncedSetInput] = use.state(debounce(250, setInput))
+	const [debouncedSetInput] = use.state(() => debounce(250, setInput))
 
 	function handleInput(event: InputEvent) {
 		const input = <HTMLInputElement>event.target!

@@ -1,7 +1,7 @@
 
 import {LitElement} from "lit"
 import {Elem} from "../../elem.js"
-import {StateReturns} from "./state-returns.js"
+import {StateTuple} from "../../magical.js"
 import {SetupInitializer} from "./setup-initializer.js"
 
 export interface UseElement<xProps extends {}> extends Elem {
@@ -9,7 +9,7 @@ export interface UseElement<xProps extends {}> extends Elem {
 
 	state<xValue>(
 		initial: xValue | ((element: LitElement & xProps) => xValue)
-	): StateReturns<xValue>
+	): StateTuple<xValue>
 
 	setup(
 		initializer: SetupInitializer<xProps>

@@ -2,7 +2,7 @@
 import {html, css} from "lit"
 import {element} from "../../element.js"
 
-export const ExampleCounter2 = element<{start: number}>({
+export const CounterElement = element<{start: number}>({
 		shadow: true,
 		properties: {
 			start: {type: Number}

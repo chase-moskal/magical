@@ -1,29 +1,32 @@
 
+import {LitElement} from "lit"
+
 import {Elem} from "../elem.js"
+import {StateSetter} from "../view/types.js"
 import {UseElement} from "./types/use-element.js"
 import {SetupInitializer} from "./types/setup-initializer.js"
 
 export const setupUseObjectForElement = <xProps extends {}>({
 		elem,
+		element,
 		addSetup,
 		rerender,
 		getRenderCount,
 		incrementStateCount,
 	}: {
 		elem: Elem
+		element: LitElement
 		rerender(): void
 		getRenderCount(): number
 		incrementStateCount(): number
 		addSetup(setup: SetupInitializer<xProps>): void
 	}): UseElement<xProps> => {
 
-	const stateMap = new Map<number, any>()
+	const stateMap = new Map<number, [any, any]>()
 
 	return {
-
-		element: <any>this,
-
 		...elem,
+		element: <any>element,
 
 		setup: initializer => {
 			if (getRenderCount() === 0)
@@ -31,35 +34,40 @@ export const setupUseObjectForElement = <xProps extends {}>({
 		},
 
 		state: initial => {
-			const currentCount = incrementStateCount()
+			const count = incrementStateCount()
+			const alreadySet = stateMap.has(count)
 
 			let currentValue: any
-			const alreadySet = stateMap.has(currentCount)
+			let previousValue: any
 
 			if (alreadySet)
-				currentValue = stateMap.get(currentCount)
+				[currentValue, previousValue] = stateMap.get(count) ?? []
 
-			else {
-				currentValue = (
-					(typeof initial === "function")
-						? (<any>initial)(this)
-						: initial
-				)
-				stateMap.set(currentCount, currentValue)
+			else
+				stateMap.set(count, [
+					currentValue =
+						(typeof initial === "function")
+							? (<any>initial)(this)
+							: initial,
+					undefined,
+				])
+
+			const setter: StateSetter<any> = valueOrFunction => {
+				const previousValue = getter()
+				const newValue = (typeof valueOrFunction === "function")
+					? (<any>valueOrFunction)(previousValue)
+					: valueOrFunction
+				stateMap.set(count, [newValue, previousValue])
+				rerender()
 			}
 
-			const getter = () => stateMap.get(currentCount)
+			const getter = () => (stateMap.get(count) ?? [])[0]
 
 			return [
 				currentValue,
-				valueOrFunction => {
-					const newValue = (typeof valueOrFunction === "function")
-						? (<any>valueOrFunction)(getter())
-						: valueOrFunction
-					stateMap.set(currentCount, newValue)
-					rerender()
-				},
-				() => stateMap.get(currentCount),
+				setter,
+				getter,
+				previousValue,
 			]
 		},
 	}

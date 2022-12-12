@@ -30,7 +30,7 @@ export type StateTuple<xValue> = [
 ]
 
 export interface ViewUse {
-	state<xValue>(initialValue: xValue): StateTuple<xValue>
+	state<xValue>(initial: xValue | (() => xValue)): StateTuple<xValue>
 	setup(e: (rerender: () => void) => () => void): void
 }
 

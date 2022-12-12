@@ -27,20 +27,20 @@ export function view<xProps extends any[]>(sauce: Sauce<xProps>) {
 			)
 			return {
 
-				state<xValue>(initialValue: xValue) {
+				state(initial) {
 					const [currentValue, previousValue] = initializeAndGetState({
-						initialValue,
+						initial,
 						stateIndex,
 						stateMap,
-					})
+					}) ?? []
 
-					const setter = createStateSetter<xValue>({
+					const setter = createStateSetter<any>({
 						stateMap,
 						stateIndex,
 						rerender,
 					})
 
-					const getter = () => <xValue>stateMap.get(stateIndex)
+					const getter = () => (stateMap.get(stateIndex) ?? [])[0]
 
 					stateIndex += 1
 

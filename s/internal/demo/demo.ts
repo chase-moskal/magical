@@ -3,7 +3,7 @@ import {css} from "lit"
 import {MyDemo} from "./my-demo.js"
 import {themeElements} from "../../theme-elements.js"
 import {registerElements} from "../../register-elements.js"
-import {ExampleCounter2} from "../../view/examples/example-counter2.js"
+import {CounterElement} from "../../view/examples/counter-element.js"
 
 const theme = css`
 	* {
@@ -13,7 +13,14 @@ const theme = css`
 	}
 `
 
-const elements = themeElements(theme, {MyDemo, NewCounter: ExampleCounter2})
+const elements = themeElements(
+	theme,
+	{
+		MyDemo,
+		CounterElement,
+	}
+)
+
 registerElements(elements)
 
 console.log("🪄 magical: successful startup")

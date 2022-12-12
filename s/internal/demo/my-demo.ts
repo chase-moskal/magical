@@ -1,8 +1,8 @@
 
 import {LitElement, html, css} from "lit"
 
-import {ExampleCounter} from "../../view/examples/example-counter.js"
 import {mixinCss} from "../../mixins/mixin-css.js"
+import {CounterView} from "../../view/examples/counter-view.js"
 import {CamelCssDemo} from "../views/camel-css-demo/camel-css-demo.js"
 
 @mixinCss(css`
@@ -23,11 +23,11 @@ export class MyDemo extends LitElement {
 			<h2>my demo element</h2>
 			<p>here is an example view:</p>
 			<div>
-				${ExampleCounter(0)}
+				${CounterView(0)}
 			</div>
 			<p>here is an example component:</p>
 			<div>
-				<new-counter start=2></new-counter >
+				<counter-element start=2></counter-element>
 			</div>
 			<div>
 				${CamelCssDemo()}

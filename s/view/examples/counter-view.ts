@@ -2,7 +2,7 @@
 import {html, css} from "lit"
 import {view} from "../view.js"
 
-export const ExampleCounter = view(use => (start: number) => {
+export const CounterView = view(use => (start: number) => {
 	const [count, setCount] = use.state(start)
 	const increment = () => setCount(previous => previous + 1)
 
@@ -14,7 +14,7 @@ export const ExampleCounter = view(use => (start: number) => {
 	`
 })
 
-ExampleCounter.css = css`
+CounterView.css = css`
 	* {
 		margin: 0;
 		padding: 0;
@@ -32,4 +32,4 @@ ExampleCounter.css = css`
 	}
 `
 
-ExampleCounter.shadow = true
+CounterView.shadow = true

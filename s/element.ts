@@ -30,6 +30,7 @@ export const element = <xProps extends {}>(options: {
 	#setups = new Set<SetupInitializer<xProps>>()
 
 	#use = setupUseObjectForElement<xProps>({
+		element: this,
 		elem: this.#elem,
 		rerender: () => this.requestUpdate(),
 		getRenderCount: () => this.#renderCount,

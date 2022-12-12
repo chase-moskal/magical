@@ -1,8 +1,12 @@
 
 import {StateMap} from "../types.js"
 
-export function initializeAndGetState({initialValue, stateIndex, stateMap}: {
-		initialValue: any
+export function initializeAndGetState({
+		initial,
+		stateIndex,
+		stateMap,
+	}: {
+		initial: any
 		stateIndex: number
 		stateMap: StateMap
 	}) {
@@ -10,7 +14,12 @@ export function initializeAndGetState({initialValue, stateIndex, stateMap}: {
 	const initialized = stateMap.has(stateIndex)
 
 	if (!initialized)
-		stateMap.set(stateIndex, [initialValue, undefined])
+		stateMap.set(stateIndex, [
+			(typeof initial === "function")
+				? initial()
+				: initial,
+			undefined,
+		])
 
-	return stateMap.get(stateIndex)!
+	return stateMap.get(stateIndex)
 }
