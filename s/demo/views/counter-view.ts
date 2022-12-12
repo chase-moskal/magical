@@ -1,6 +1,7 @@
 
-import {html, css} from "lit"
+import {html} from "lit"
 import {view} from "../../view/view.js"
+import counterStylesCss from "../styles/counter-styles.css.js"
 
 export const CounterView = view(use => (start: number) => {
 	const [count, setCount] = use.state(start)
@@ -14,22 +15,5 @@ export const CounterView = view(use => (start: number) => {
 	`
 })
 
-CounterView.css = css`
-	* {
-		margin: 0;
-		padding: 0;
-		box-sizing: border-box;
-	}
-	div {
-		border: 1px solid #fff4;
-		border-radius: 0.5em;
-		padding: 0.5em;
-		max-width: max-content;
-	}
-	button {
-		color: rebeccapurple;
-		padding: 0.2em 0.5em;
-	}
-`
-
+CounterView.css = counterStylesCss
 CounterView.shadow = true
