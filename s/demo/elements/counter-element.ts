@@ -3,8 +3,8 @@ import {html} from "lit"
 import {property} from "lit/decorators.js"
 
 import {MagicElement} from "../../elephant.js"
-import {MagicEvent} from "../../event.js"
 import {mixinCss} from "../../mixins/mixin-css.js"
+
 import counterStylesCss from "../styles/counter-styles.css.js"
 
 @mixinCss(counterStylesCss)
