@@ -35,7 +35,7 @@ export interface ViewUse {
 }
 
 export interface Renderer<xProps extends any[]> {
-	(...props: xProps): TemplateResult | null
+	(...props: xProps): TemplateResult | void
 }
 
 export interface View<xProps extends any[]> extends Renderer<xProps> {
