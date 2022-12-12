@@ -1,34 +1,10 @@
 
-import {elem, Elem} from "./elem.js"
-import {Constructor} from "./types.js"
-import {StateSetter} from "./view/types.js"
 import {LitElement, TemplateResult, PropertyDeclaration, CSSResult} from "lit"
 
-export type StateReturns<xValue> = [
-	xValue,
-	StateSetter<xValue>,
-	() => xValue,
-]
-
-export type Initialize<xProps extends {}> = (e: LitElement & xProps, elem: Elem) => void
-
-export interface UseElement<xProps extends {}> extends Elem {
-	element: LitElement & xProps
-
-	state<xValue>(
-		initial: xValue | ((element: LitElement & xProps) => xValue)
-	): StateReturns<xValue>
-
-	setup(
-		initializer: (element: LitElement & xProps) => (void | (() => void))
-	): void
-}
-
-export function asPropertyDeclarations<xProps extends {}>(
-		declarations: {[P in keyof xProps]: PropertyDeclaration}
-	) {
-	return declarations
-}
+import {elem} from "./elem.js"
+import {Constructor} from "./types.js"
+import {Initialize} from "./element/types/initialize.js"
+import {UseElement} from "./element/types/use-element.js"
 
 export const element = <xProps extends {}>(options: {
 		styles?: CSSResult
