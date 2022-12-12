@@ -1,7 +1,7 @@
 {
 	"name": "@chasemoskal/magical",
 	"description": "web toolkit for lit apps",
-	"version": "0.0.5",
+	"version": "0.1.0-dev.0",
 	"license": "MIT",
 	"type": "module",
 	"author": "Chase Moskal <chasemoskal@gmail.com>",
