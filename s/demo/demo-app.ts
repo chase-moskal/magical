@@ -1,9 +1,9 @@
 
 import {LitElement, html, css} from "lit"
 
-import {mixinCss} from "../../mixins/mixin-css.js"
-import {CounterView} from "../../view/examples/counter-view.js"
-import {CamelCssDemo} from "../views/camel-css-demo/camel-css-demo.js"
+import {mixinCss} from "../mixins/mixin-css.js"
+import {CounterView} from "./views/counter-view.js"
+import {CamelCssDemo} from "./views/camel-css-demo.js"
 
 @mixinCss(css`
 
@@ -16,7 +16,7 @@ p {
 }
 
 `)
-export class MyDemo extends LitElement {
+export class DemoApp extends LitElement {
 
 	render() {
 		return html`

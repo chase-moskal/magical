@@ -1,9 +1,9 @@
 
 import {css} from "lit"
-import {MyDemo} from "./my-demo.js"
-import {themeElements} from "../../theme-elements.js"
-import {registerElements} from "../../register-elements.js"
-import {CounterElement} from "../../view/examples/counter-element.js"
+import {DemoApp} from "./demo-app.js"
+import {themeElements} from "../theme-elements.js"
+import {registerElements} from "../register-elements.js"
+import {CounterElement} from "./elements/counter-element.js"
 
 const theme = css`
 	* {
@@ -16,7 +16,7 @@ const theme = css`
 const elements = themeElements(
 	theme,
 	{
-		MyDemo,
+		DemoApp,
 		CounterElement,
 	}
 )

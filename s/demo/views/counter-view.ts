@@ -1,6 +1,6 @@
 
 import {html, css} from "lit"
-import {view} from "../view.js"
+import {view} from "../../view/view.js"
 
 export const CounterView = view(use => (start: number) => {
 	const [count, setCount] = use.state(start)
