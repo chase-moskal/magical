@@ -1,22 +1,25 @@
 
-import {render} from "lit"
+import {CSSResultGroup, render} from "lit"
 import {directive, Part} from "lit/directive.js"
 import {AsyncDirective} from "lit/async-directive.js"
 
-import {debounce} from "../toolbox/debounce/debounce.js"
-import {createStateSetter} from "./helpers/create-state-setter.js"
-import {View, Sauce, SetupMap, StateMap, Use} from "./types.js"
-import {initializeAndGetState} from "./helpers/initialize-and-get-state.js"
-import {createShadowDomWithStyles} from "./helpers/create-shadow-dom-with-styles.js"
+import {debounce} from "./toolbox/debounce/debounce.js"
+import {createStateSetter} from "./view/create-state-setter.js"
+import {View, Sauce, SetupMap, StateMap, ViewUse} from "./view/types.js"
+import {initializeAndGetState} from "./view/initialize-and-get-state.js"
+import {createShadowDomWithStyles} from "./view/create-shadow-dom-with-styles.js"
 
-export function view<xProps extends any[]>(sauce: Sauce<xProps>) {
+export const view = <xProps extends any[]>({styles, shadow = true}: {
+		shadow?: boolean
+		styles?: CSSResultGroup
+	} = {}) => ({render(sauce: Sauce<xProps>) {
 
 	class ViewDirective extends AsyncDirective {
 		#mostRecentProps = <xProps><unknown>[]
 		#stateMap: StateMap = new Map<number, [any, any]>()
 		#setupMap: SetupMap = new Map<number, () => void>()
 
-		#generateUse(): Use {
+		#generateUse(): ViewUse {
 			const stateMap = this.#stateMap
 			const setupMap = this.#setupMap
 			let stateIndex = 0
@@ -27,13 +30,29 @@ export function view<xProps extends any[]>(sauce: Sauce<xProps>) {
 			)
 			return {
 
-				state<xValue>(initialValue: xValue) {
-					const [currentValue, previousValue]
-						= initializeAndGetState({initialValue, stateIndex, stateMap})
-					const set
-						= createStateSetter<xValue>({stateMap, stateIndex, rerender})
+				state(initial) {
+					const [currentValue, previousValue] = initializeAndGetState({
+						initial,
+						stateIndex,
+						stateMap,
+					}) ?? []
+
+					const setter = createStateSetter<any>({
+						stateMap,
+						stateIndex,
+						rerender,
+					})
+
+					const getter = () => (stateMap.get(stateIndex) ?? [])[0]
+
 					stateIndex += 1
-					return [currentValue, set, currentValue !== previousValue]
+
+					return [
+						currentValue,
+						setter,
+						getter,
+						previousValue,
+					]
 				},
 
 				setup(e) {
@@ -47,8 +66,8 @@ export function view<xProps extends any[]>(sauce: Sauce<xProps>) {
 			}
 		}
 
-		#root = viewDirective.shadow
-			? createShadowDomWithStyles(viewDirective.css)
+		#root = shadow
+			? createShadowDomWithStyles(styles)
 			: undefined
 
 		#renderIntoShadowOrNot() {
@@ -84,4 +103,4 @@ export function view<xProps extends any[]>(sauce: Sauce<xProps>) {
 
 	const viewDirective = <View<xProps>>directive(ViewDirective)
 	return viewDirective
-}
+}})

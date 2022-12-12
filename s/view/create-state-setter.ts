@@ -1,5 +1,5 @@
 
-import {StateMap, StateSetter, StateSettingFunction} from "../types.js"
+import {StateMap, StateSetter, StateSettingFunction} from "./types.js"
 
 export function createStateSetter<xValue>({
 		stateMap, stateIndex, rerender,

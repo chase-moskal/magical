@@ -1,10 +1,11 @@
 
 import {html} from "lit"
 
-import {view} from "../../../view/view.js"
-import {CamelCssError} from "../../../camel-css/errors.js"
-import {debounce} from "../../../toolbox/debounce/debounce.js"
-import {css, camelCss} from "../../../camel-css/camel-css-lit.js"
+import {view} from "../../view.js"
+import {camelCss} from "../../camel-css/lit.js"
+import camelDemoCss from "../styles/camel-demo.css.js"
+import {CamelCssError} from "../../camel-css/errors.js"
+import {debounce} from "../../toolbox/debounce/debounce.js"
 
 const startingInput = `
 header {
@@ -15,9 +16,13 @@ header {
 }
 `
 
-export const CamelCssDemo = view(use => () => {
+export const CamelDemo = view({
+		shadow: true,
+		styles: camelDemoCss,
+	}).render(use => () => {
+
 	const [input, setInput] = use.state(startingInput.trim())
-	const [debouncedSetInput] = use.state(debounce(250, setInput))
+	const [debouncedSetInput] = use.state(() => debounce(250, setInput))
 
 	function handleInput(event: InputEvent) {
 		const input = <HTMLInputElement>event.target!
@@ -49,7 +54,6 @@ export const CamelCssDemo = view(use => () => {
 
 	return html`
 		<section>
-			<h2>camel css demo</h2>
 			<div ?data-problem=${!!problem}>
 				<div class=input>
 					<strong>input</strong>
@@ -67,64 +71,3 @@ export const CamelCssDemo = view(use => () => {
 		</section>
 	`
 })
-
-CamelCssDemo.css = css`
-	* {
-		margin: 0;
-		padding: 0;
-		box-sizing: border-box;
-	}
-
-	section {
-		> div {
-			display: flex;
-			gap: 0.5em;
-
-			> div {
-				flex: 1 1 auto;
-				display: flex;
-				flex-direction: column;
-				color: white;
-
-				textarea {
-					width: 100%;
-					height: 12em;
-					padding: 0.2em;
-					tab-size: 2;
-					color: inherit;
-					background: transparent;
-					border-radius: 0.4em;
-					border: 1px solid currentColor;
-				}
-			}
-
-			> .output {
-				color: #71ffa4;
-				textarea:focus {
-					outline: 0;
-				}
-			}
-		}
-
-		[data-problem] {
-			.output {
-				color: #ff6f57;
-			}
-		}
-
-		.error {
-			color: #ff6f57;
-		}
-
-		.time {
-			font-size: 0.8em;
-			color: white;
-			opacity: 0.5;
-			font-style: italic;
-			text-align: right;
-			padding: 0 1em;
-		}
-	}
-`
-
-CamelCssDemo.shadow = true

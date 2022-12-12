@@ -17,6 +17,7 @@
 		"importly": "importly < package-lock.json > x/importmap.json",
 		"watch": "tsc -w",
 		"start": "http-server",
+		"dev": "run-p start watch",
 		"test": "cynic node x/tests.test.js"
 	},
 	"keywords": [
@@ -29,7 +30,7 @@
 		"es-module-shims": "^1.6.2"
 	},
 	"peerDependencies": {
-		"lit": "^2.4.1"
+		"lit": "^2.5.0"
 	},
 	"devDependencies": {
 		"cynic": "0.1.0-dev.16",
@@ -38,6 +39,6 @@
 		"mkdirp": "^1.0.4",
 		"npm-run-all": "^4.1.5",
 		"rimraf": "^3.0.2",
-		"typescript": "^4.9.3"
+		"typescript": "^4.9.4"
 	}
 }
