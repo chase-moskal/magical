@@ -4,6 +4,7 @@ import {property} from "lit/decorators.js"
 
 import {MagicElement} from "../../element.js"
 import {mixinCss} from "../../mixins/mixin-css.js"
+import {UseElement} from "../../element/types/use-element.js"
 
 import counterStylesCss from "../styles/counter-styles.css.js"
 
@@ -13,8 +14,7 @@ export class CounterElement extends MagicElement {
 	@property({type: Number})
 	start = 0
 
-	realize() {
-		const {use} = this
+	realize(use: UseElement<typeof this>) {
 		const [count, setCount] = use.state(use.element.start)
 
 		const increment = () => setCount(count + 1)

@@ -21,7 +21,7 @@ but magic elements have a `realize` method instead of a *render* method.
 in your `realize` method, use `this.use`, to get access to a "hooks" interface for state management.
 
 ```ts
-import {MagicElement, mixinCss} from "@chasemoskal/magical"
+import {MagicElement, mixinCss, UseElement} from "@chasemoskal/magical"
 
 import {html} from "lit"
 import {property} from "lit/decorators.js"
@@ -33,10 +33,8 @@ export class CounterElement extends MagicElement {
   @property({type: Number})
   start = 0
 
-  realize() {
-    const {use} = this
+  realize(use: UseElement<typeof this>) {
     const [count, setCount] = use.state(this.start)
-
     const increment = () => setCount(x => x + 1)
 
     use.setup(() => {
