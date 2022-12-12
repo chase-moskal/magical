@@ -17,6 +17,7 @@
 		"importly": "importly < package-lock.json > x/importmap.json",
 		"watch": "tsc -w",
 		"start": "http-server",
+		"dev": "run-p start watch",
 		"test": "cynic node x/tests.test.js"
 	},
 	"keywords": [
