@@ -1,21 +1,23 @@
 
-import {LitElement, TemplateResult, PropertyDeclaration, CSSResult} from "lit"
+import {LitElement, TemplateResult, CSSResult} from "lit"
 
 import {elem} from "./elem.js"
 import {Constructor} from "./types.js"
 import {Initialize} from "./element/types/initialize.js"
+import {Properties} from "./element/types/properties.js"
 import {UseElement} from "./element/types/use-element.js"
+import {SetupInitializer} from "./element/types/setup-initializer.js"
+import {setupUseObjectForElement} from "./element/setup-use-object-for-element.js"
 
 export const element = <xProps extends {}>(options: {
-		styles?: CSSResult
 		shadow?: boolean
+		styles?: CSSResult
 		initialize?: Initialize<xProps>
-		properties?: {[P in keyof xProps]: PropertyDeclaration}
+		properties?: Properties<xProps>
 	}) => ({
 		render: (renderHtml: (use: UseElement<xProps>) => TemplateResult) =>
 			<Constructor<LitElement & xProps>><any>
-				class extends LitElement
-	{
+				class extends LitElement {
 
 	static readonly styles = options.styles
 	static readonly properties = options.properties ?? {}
@@ -23,56 +25,17 @@ export const element = <xProps extends {}>(options: {
 	#renderCount = 0
 	#stateCount = 0
 
-	#stateMap = new Map<number, any>()
-	#setups = new Set<(element: LitElement & xProps) => (void | (() => void))>()
-	#teardowns = new Set<() => void>()
 	#elem = elem(this)
+	#teardowns = new Set<() => void>()
+	#setups = new Set<SetupInitializer<xProps>>()
 
-	#use: UseElement<xProps> = {
-		element: <any>this,
-
-		...this.#elem,
-
-		setup: initializer => {
-			if (this.#renderCount === 0) {
-				this.#setups.add(initializer)
-			}
-		},
-
-		state: initial => {
-			const currentCount = this.#stateCount
-			this.#stateCount += 1
-
-			let currentValue: any
-			const alreadySet = this.#stateMap.has(currentCount)
-
-			if (alreadySet)
-				currentValue = this.#stateMap.get(currentCount)
-
-			else {
-				currentValue = (
-					(typeof initial === "function")
-						? (<any>initial)(this)
-						: initial
-				)
-				this.#stateMap.set(currentCount, currentValue)
-			}
-
-			const getter = () => this.#stateMap.get(currentCount)
-
-			return [
-				currentValue,
-				valueOrFunction => {
-					const newValue = (typeof valueOrFunction === "function")
-						? (<any>valueOrFunction)(getter())
-						: valueOrFunction
-					this.#stateMap.set(currentCount, newValue)
-					this.requestUpdate()
-				},
-				() => this.#stateMap.get(currentCount),
-			]
-		},
-	}
+	#use = setupUseObjectForElement<xProps>({
+		elem: this.#elem,
+		rerender: () => this.requestUpdate(),
+		getRenderCount: () => this.#renderCount,
+		incrementStateCount: () => this.#stateCount++,
+		addSetup: initializer => this.#setups.add(initializer),
+	})
 
 	constructor() {
 		super()
