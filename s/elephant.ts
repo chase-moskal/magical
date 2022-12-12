@@ -6,9 +6,9 @@ import {UseElement} from "./elephant/types/use-element.js"
 import {SetupInitializer} from "./elephant/types/setup-initializer.js"
 import {setupUseObjectForElement} from "./elephant/setup-use-object-for-element.js"
 
-export class MagicalElement extends LitElement {
+export class MagicElement extends LitElement {
 	protected realize(use: UseElement<typeof this>): TemplateResult | void {}
-
+	
 	#renderCount = 0
 	#stateCount = 0
 
