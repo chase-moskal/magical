@@ -6,7 +6,7 @@ import counterStylesCss from "../styles/counter-styles.css.js"
 export const CounterView = view({
 		shadow: true,
 		styles: counterStylesCss,
-	}).render(use => (start: number) => {
+	}, use => (start: number) => {
 
 	const [count, setCount] = use.state(start)
 	const increment = () => setCount(previous => previous + 1)

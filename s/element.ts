@@ -9,8 +9,8 @@ import {setupUseObjectForElement} from "./element/setup-use-object-for-element.j
 export class MagicElement extends LitElement {
 	protected realize(
 		use: UseElement<typeof this>
-		): TemplateResult | void {}
-	
+	): TemplateResult | void {}
+
 	#renderCount = 0
 	#stateCount = 0
 

@@ -19,7 +19,7 @@ header {
 export const CamelDemo = view({
 		shadow: true,
 		styles: camelDemoCss,
-	}).render(use => () => {
+	}, use => () => {
 
 	const [input, setInput] = use.state(startingInput.trim())
 	const [debouncedSetInput] = use.state(() => debounce(250, setInput))

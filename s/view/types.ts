@@ -1,5 +1,10 @@
 
-import {TemplateResult} from "lit"
+import {CSSResultGroup, TemplateResult} from "lit"
+
+export interface ViewOptions {
+	shadow?: boolean
+	styles?: CSSResultGroup
+}
 
 export type StateMap = Map<number, [any, any]> // [currentState, previousState]
 export type SetupMap = Map<number, () => void>
