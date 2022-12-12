@@ -1,5 +1,5 @@
 
-import {css} from "../../camel-css/camel-css-lit.js"
+import {css} from "../../camel-css/lit.js"
 
 export default css`
 

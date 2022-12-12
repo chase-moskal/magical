@@ -2,10 +2,10 @@
 import {html} from "lit"
 
 import {view} from "../../view.js"
+import {camelCss} from "../../camel-css/lit.js"
 import camelDemoCss from "../styles/camel-demo.css.js"
 import {CamelCssError} from "../../camel-css/errors.js"
 import {debounce} from "../../toolbox/debounce/debounce.js"
-import {camelCss} from "../../camel-css/camel-css-lit.js"
 
 const startingInput = `
 header {
