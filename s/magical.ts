@@ -6,6 +6,8 @@ export * from  "./element/types/setup-initializer.js"
 export * from  "./element/types/state-returns.js"
 export * from  "./element/types/use-element.js"
 
+export * from "./event.js"
+
 export * from "./view/view.js"
 export * from "./view/types.js"
 
