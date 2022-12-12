@@ -6,26 +6,18 @@ import {CounterView} from "./views/counter-view.js"
 import {CamelCssDemo} from "./views/camel-css-demo.js"
 
 @mixinCss(css`
-
-div {
-	margin-top: 1.5em;
-}
-
-p {
-	margin-top: 0.8em;
-}
-
+:host > * + * { margin-top: 0.5em; }
+div { margin-bottom: 2em; }
 `)
 export class DemoApp extends LitElement {
 
 	render() {
 		return html`
-			<h2>my demo element</h2>
-			<p>here is an example view:</p>
+			<p>example view:</p>
 			<div>
 				${CounterView(0)}
 			</div>
-			<p>here is an example component:</p>
+			<p>example element:</p>
 			<div>
 				<counter-element start=2></counter-element>
 			</div>
