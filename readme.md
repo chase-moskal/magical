@@ -4,18 +4,19 @@
 
 *web toolkit for [lit](https://lit.dev/) apps*
 
-🕹️ **live demo page [magical.chasemoskal.com](https://magical.chasemoskal.com/)**  
+
+🕹️ [**live demo — magical.chasemoskal.com**](https://magical.chasemoskal.com/)  
 📦 `npm install @chasemoskal/magical`  
 
-developing apps with `lit`, we've slowly accumulated handy tools and good patterns we like, that we use in many projects. now all this magical good stuff lives here, so we can maintain it better, and you can benefit!
+magical is a collection of tools we build, maintain, and use every day to make great [lit](https://lit.dev/) applications.
 
 <br/>
 
 ## 🤖 magic `element`
 
-a magical element is a lit element.
+every magic element is also a lit element.
 
-but you have a `realize` method instead of a *render* method.
+but magic elements have a `realize` method instead of a *render* method.
 
 in your `realize` method, use `this.use`, to get access to a "hooks" interface for state management.
 
@@ -193,7 +194,7 @@ div {
 `
 ```
 
-it's experimental and might change. it uses `^` instead of sass's `&`
+camel-css uses `^` instead of sass's `&`
 
 <br/>
 
@@ -203,11 +204,11 @@ it's experimental and might change. it uses `^` instead of sass's `&`
 
 for the love of god, if you're writing a web components library, do not call `customElements.define` in those component modules.
 
-be polite, and allow us the opportunity to augment your elements, rename them, apply a css theme, and then we can register our augmented elements
+be polite, and allow us the opportunity to augment your elements, rename them, apply a css theme, and then we can register our augmented elements.
 
 so, when we're making a library, we like to have a function like `getElements` that returns all the library's elements classes.
 
-then it's easy for anybody to apply a css them and register the elements:
+then it's easy for anybody to apply a css theme and register the elements:
 
 ```js
 import {registerElements, themeElements} from "@chasemoskal/magical"
