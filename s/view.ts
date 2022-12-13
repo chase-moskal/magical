@@ -7,7 +7,7 @@ import {debounce} from "./toolbox/debounce/debounce.js"
 import {createStateSetter} from "./view/create-state-setter.js"
 import {initializeAndGetState} from "./view/initialize-and-get-state.js"
 import {createShadowDomWithStyles} from "./view/create-shadow-dom-with-styles.js"
-import {View, Sauce, SetupMap, StateMap, ViewUse, ViewOptions} from "./view/types.js"
+import {View, Sauce, SetupMap, StateMap, UseView, ViewOptions} from "./view/types.js"
 
 export const view = <xProps extends any[]>(
 		{styles, shadow = false}: ViewOptions,
@@ -19,7 +19,7 @@ export const view = <xProps extends any[]>(
 		#stateMap: StateMap = new Map<number, [any, any]>()
 		#setupMap: SetupMap = new Map<number, () => void>()
 
-		#generateUse(): ViewUse {
+		#generateUse(): UseView {
 			const stateMap = this.#stateMap
 			const setupMap = this.#setupMap
 			let stateIndex = 0

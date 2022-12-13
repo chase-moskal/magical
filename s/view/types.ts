@@ -34,7 +34,7 @@ export type StateTuple<xValue> = [
 	xValue,
 ]
 
-export interface ViewUse {
+export interface UseView {
 	state<xValue>(initial: xValue | (() => xValue)): StateTuple<xValue>
 	setup(e: (rerender: () => void) => () => void): void
 }
@@ -46,5 +46,5 @@ export interface Renderer<xProps extends any[]> {
 export interface View<xProps extends any[]> extends Renderer<xProps> {}
 
 export type Sauce<xProps extends any[]> = (
-	(use: ViewUse) => Renderer<xProps>
+	(use: UseView) => Renderer<xProps>
 )
