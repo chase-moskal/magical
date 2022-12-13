@@ -22,7 +22,7 @@ section {
 
 			textarea {
 				width: 100%;
-				height: 12em;
+				height: 18em;
 				padding: 0.2em;
 				tab-size: 2;
 				color: inherit;

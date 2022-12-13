@@ -10,8 +10,13 @@ import {debounce} from "../../toolbox/debounce/debounce.js"
 const startingInput = `
 header {
 	color: red;
+
 	h1 {
 		font-size: 1rem;
+
+		^:hover {
+			color: yellow;
+		}
 	}
 }
 `
