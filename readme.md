@@ -4,9 +4,9 @@
 
 *web toolkit for [lit](https://lit.dev/) apps*
 
-
 🕹️ [**live demo — magical.chasemoskal.com**](https://magical.chasemoskal.com/)  
 📦 `npm install @chasemoskal/magical`  
+💖 *made with open source love*  
 
 magical is a collection of tools we build, maintain, and use every day to make great [lit](https://lit.dev/) applications.
 
@@ -89,7 +89,7 @@ import stylesCss from "./styles.css.js"
 
 export const CounterView = view({
     shadow: true,
-    styles: counterStylesCss,
+    styles: stylesCss,
   }).render(use => (start: number) => {
 
   const [count, setCount] = use.state(start)
@@ -139,6 +139,7 @@ compared against elements:
 compared against simple render functions:
 - views have state
 - views are independent rendering contexts
+- views can have shadow dom and their own stylesheets
 
 i think a good way to think about elements and views is like this:
 - elements are entrypoints at the html-level
@@ -157,12 +158,12 @@ import {MagicEvent} from "@chasemoskal/magical"
 export class ProfileChanged extends
   MagicEvent<{count: number}>("profile_changed") {}
 
-// dispatch an event
+// dispatch the event
 MyCoolEvent
   .target(window)
   .dispatch({count: 1})
 
-// listen for an event
+// listen for the event
 const unlisten = MyCoolEvent
   .target(window)
   .listen(event => {
@@ -242,9 +243,9 @@ const debouncedAction = debounce(1000, action)
 // debouncedAction is a promise that resolves
 // after the 1000 millseconds of no activity
 
-debounceThing()
-debounceThing()
-await debounceThing()
+debouncedAction()
+debouncedAction()
+await debouncedAction()
 //> "action!"
 // the action only fires once
 ```
