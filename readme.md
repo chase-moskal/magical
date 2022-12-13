@@ -40,7 +40,7 @@ export class CounterElement extends MagicElement {
     use.setup(() => {
       const listener = () => console.log("resized")
       window.addEventListener("resize", listener)
-      return () => window.removeEventListener(listener)
+      return () => window.removeEventListener("resize", listener)
     })
 
     return html`
