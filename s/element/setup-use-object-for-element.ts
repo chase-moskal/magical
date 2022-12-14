@@ -1,7 +1,6 @@
 
 import {LitElement} from "lit"
 
-import {Elem} from "../elem.js"
 import {StateSetter} from "../view/types.js"
 import {UseElement} from "./types/use-element.js"
 import {SetupInitializer} from "./types/setup-initializer.js"
