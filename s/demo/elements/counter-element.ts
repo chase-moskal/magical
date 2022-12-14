@@ -3,7 +3,7 @@ import {html} from "lit"
 import {property} from "lit/decorators.js"
 
 import {MagicElement} from "../../element.js"
-import {mixinCss} from "../../mixins/mixin-css.js"
+import {mixinCss} from "../../mixins/css.js"
 import {UseElement} from "../../element/types/use-element.js"
 
 import counterStylesCss from "../styles/counter-styles.css.js"
