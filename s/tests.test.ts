@@ -1,7 +1,10 @@
 
-import {Suite, expect} from "cynic"
-import camelCssTest from "./camel-css/camel-css.test.js"
+import {Suite} from "cynic"
+
+import camel from "./camel-css/camel-css.test.js"
+import debounce from "./toolbox/debounce/debounce.test.js"
 
 export default <Suite>{
-	camelCssTest,
+	camel,
+	debounce,
 }

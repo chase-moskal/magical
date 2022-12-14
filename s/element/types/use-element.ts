@@ -1,14 +1,12 @@
 
 import {LitElement} from "lit"
-import {Elem} from "../../elem.js"
 import {StateTuple} from "../../magical.js"
 import {SetupInitializer} from "./setup-initializer.js"
 
-export interface UseElement<E extends LitElement> extends Elem {
-	element: E
+export interface UseElement<E extends LitElement> {
 
 	state<xValue>(
-		initial: xValue | ((element: E) => xValue)
+		initial: xValue | (() => xValue)
 	): StateTuple<xValue>
 
 	setup(

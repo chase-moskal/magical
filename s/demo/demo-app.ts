@@ -1,7 +1,7 @@
 
 import {LitElement, html, css} from "lit"
 
-import {mixinCss} from "../mixins/mixin-css.js"
+import {mixinCss} from "../mixins/css.js"
 import {CounterView} from "./views/counter-view.js"
 import {CamelDemo} from "./views/camel-demo.js"
 

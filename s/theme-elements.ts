@@ -2,7 +2,7 @@
 import {LitElement, CSSResultGroup} from "lit"
 
 import {obtool} from "./toolbox/obtool.js"
-import {mixinCss} from "./mixins/mixin-css.js"
+import {mixinCss} from "./mixins/css.js"
 import {Constructor} from "./toolbox/handy-types.js"
 
 export const themeElements = <
