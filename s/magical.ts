@@ -1,5 +1,7 @@
 
 export * from "./event.js"
+export * from "./event/types/dispatch-options.js"
+export * from "./event/default-dispatch-options.js"
 
 export * from "./element.js"
 export * from "./element/types/use-element.js"
