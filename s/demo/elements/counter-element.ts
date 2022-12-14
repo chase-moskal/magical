@@ -15,10 +15,10 @@ export class CounterElement extends MagicElement {
 	start = 0
 
 	realize(use: UseElement<typeof this>) {
-		const [count, setCount] = use.state(use.element.start)
+		const [count, setCount] = use.state(this.start)
 
 		const increment = () => setCount(count + 1)
-		const reset = () => setCount(use.element.start)
+		const reset = () => setCount(this.start)
 
 		return html`
 			<div>

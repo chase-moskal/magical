@@ -7,15 +7,11 @@ import {UseElement} from "./types/use-element.js"
 import {SetupInitializer} from "./types/setup-initializer.js"
 
 export const setupUseObjectForElement = <E extends LitElement>({
-		elem,
-		element,
 		addSetup,
 		rerender,
 		getRenderCount,
 		incrementStateCount,
 	}: {
-		elem: Elem
-		element: E
 		rerender(): void
 		getRenderCount(): number
 		incrementStateCount(): number
@@ -25,8 +21,6 @@ export const setupUseObjectForElement = <E extends LitElement>({
 	const stateMap = new Map<number, [any, any]>()
 
 	return {
-		...elem,
-		element: <any>element,
 
 		setup: initializer => {
 			if (getRenderCount() === 0)
@@ -47,7 +41,7 @@ export const setupUseObjectForElement = <E extends LitElement>({
 				stateMap.set(count, [
 					currentValue =
 						(typeof initial === "function")
-							? (<any>initial)(this)
+							? (<any>initial)()
 							: initial,
 					undefined,
 				])
