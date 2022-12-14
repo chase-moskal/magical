@@ -1,6 +1,5 @@
 
-name: release
-
+name: 🚀 release to github pages
 on:
   push:
     branches: ["release"]

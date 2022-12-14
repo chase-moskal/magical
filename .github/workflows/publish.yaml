@@ -1,5 +1,5 @@
 
-name: npm publish
+name: 📦 publish to npm
 on:
   push:
     tags:
