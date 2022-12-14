@@ -1,6 +1,6 @@
 
-import {GetDetail} from "./types/get-detail.js"
 import {MagicEventBase} from "./base.js"
+import {GetDetail} from "./types/get-detail.js"
 import {Constructor} from "../toolbox/handy-types.js"
 import {DispatchOptions} from "./types/dispatch-options.js"
 
@@ -14,7 +14,7 @@ export const ev =
 				detail: GetDetail<InstanceType<E>>,
 				options?: Partial<DispatchOptions>,
 			) {
-			target.dispatchEvent(new Event(detail, options))
+			target.dispatchEvent(new Event(Event.type, {...options, detail}))
 		},
 
 		listen(
