@@ -33,7 +33,8 @@ export class CounterElement extends MagicElement {
   @property({type: Number})
   start = 0
 
-  realize(use: UseElement<typeof this>) {
+  realize() {
+    const {use} = this
     const [count, setCount] = use.state(this.start)
     const increment = () => setCount(x => x + 1)
 
