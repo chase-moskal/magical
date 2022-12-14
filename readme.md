@@ -184,7 +184,7 @@ it can run serverside, as part of a build script, or our preferred method — li
 camel css can be a drop-in replacement for lit's css tagged-template function:
 
 ```js
-import {css} from "@chasemoskal/magical/x/camel-css/lit.js"
+import {css} from "@chasemoskal/magical"
 
 const styles = css`
 div {
