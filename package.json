@@ -21,8 +21,17 @@
 		"test": "cynic node x/tests.test.js"
 	},
 	"keywords": [
+		"view",
 		"views",
+		"events",
+		"element",
+		"elements",
+		"components",
+		"web-components",
 		"lit",
+		"lit-html",
+		"css",
+		"css-preprocessor",
 		"virtual",
 		"hooks"
 	],
