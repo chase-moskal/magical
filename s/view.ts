@@ -1,5 +1,5 @@
 
-import {render} from "lit"
+import {render, TemplateResult} from "lit"
 import {directive, Part} from "lit/directive.js"
 import {AsyncDirective} from "lit/async-directive.js"
 
@@ -38,12 +38,18 @@ export const view = <xProps extends any[]>(
 			: undefined
 
 		#renderIntoShadowOrNot() {
+			let result: void | HTMLElement | TemplateResult
+
 			if (this.#root) {
 				render(this.render(), this.#root.shadow)
-				return this.#root.element
+				result = this.#root.element
 			}
-			else
-				return this.render()
+			else {
+				result = this.render()
+			}
+
+			this.#renderCount += 1
+			return result
 		}
 
 		update(part: Part, props: xProps) {
