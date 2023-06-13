@@ -172,6 +172,22 @@ const unlisten = MyCoolEvent
   })
 ```
 
+instead of extending MagicEvent, you can just use `ev` directly to listen and dispatch custom events:
+
+```js
+import {ev} from "@chasemoskal/magical"
+
+ev(MyCustomEvent)
+  .target(window)
+  .dispatch({lol: "example"})
+
+const unlisten = ev(MyCustomEvent)
+  .target(window)
+  .listen(event => {
+    console.log("example event", event.detail.lol)
+  })
+```
+
 <br/>
 
 ## 🐫 camel `css`
