@@ -31,3 +31,5 @@ export * from "./toolbox/obtool.js"
 export * from "./template-slots.js"
 export * from "./theme-elements.js"
 export * from "./register-elements.js"
+export * from "./provide-context-to-elements.js"
+
