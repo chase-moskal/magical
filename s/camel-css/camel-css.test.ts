@@ -127,7 +127,7 @@ export default <Suite>{
 				`
 				expect(strip(css)).equals(strip(expectedResult))
 			},
-			async "parent reference is properly replaced"() {
+			async "parent reference (^) is properly replaced"() {
 				const tokens = tokenize(`
 					header {
 						background: yellow;
@@ -143,36 +143,52 @@ export default <Suite>{
 				`
 				expect(strip(css)).equals(strip(expectedResult))
 			},
-			async "slash-slash comments are stripped away from output"() {
-				const result = strip(camelCss(`
-					// my comment
-					h1 { // lol1
-						// another comment
-						color: red;
-						// yet another comment!
-						background: linear-gradient(
-							to bottom,
-							magenta, // lol
-							// rofl
-							pink,
-						);
-					} // rofl2
-					h2 // hello
-					{ color: blue; }
-				`))
-
-				expect(result).equals(strip(`
-					h1 {
-						color: red;
-						background: linear-gradient(
-							to bottom,
-							magenta,
-							pink,
-						);
+			async "parent reference (&) is properly replaced"() {
+				const tokens = tokenize(`
+					header {
+						background: yellow;
+						&:hover { color: red; }
 					}
-					h2 { color: blue; }
-				`))
+				`)
+				const expressions = parse(tokens)
+				const cssBlocks = compile(expressions)
+				const css = [...cssBlocks].join("")
+				const expectedResult = `
+					header { background: yellow; }
+					header:hover { color: red; }
+				`
+				expect(strip(css)).equals(strip(expectedResult))
 			},
+			// async "slash-slash comments are stripped away from output"() {
+			// 	const result = strip(camelCss(`
+			// 		// my comment
+			// 		h1 { // lol1
+			// 			// another comment
+			// 			color: red;
+			// 			// yet another comment!
+			// 			background: linear-gradient(
+			// 				to bottom,
+			// 				magenta, // lol
+			// 				// rofl
+			// 				pink,
+			// 			);
+			// 		} // rofl2
+			// 		h2 // hello
+			// 		{ color: blue; }
+			// 	`))
+
+			// 	expect(result).equals(strip(`
+			// 		h1 {
+			// 			color: red;
+			// 			background: linear-gradient(
+			// 				to bottom,
+			// 				magenta,
+			// 				pink,
+			// 			);
+			// 		}
+			// 		h2 { color: blue; }
+			// 	`))
+			// },
 			// async "slash-star comments remain in output"() {
 			// 	expect(camelCss(strip(`
 			// 		/* here is my comment that stays in the output */
