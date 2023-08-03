@@ -43,5 +43,6 @@ function stripAwayComments(text: string) {
 }
 
 function handleParentReference(groupedSelector: string) {
-	return groupedSelector.replaceAll(/(\s+)*(\^)/gm, "")
+	return groupedSelector.replaceAll(/(\s+)*(\^|&)/gm, "")
 }
+
