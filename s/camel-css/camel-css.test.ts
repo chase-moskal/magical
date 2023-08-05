@@ -159,6 +159,26 @@ export default <Suite>{
 				`
 				expect(strip(css)).equals(strip(expectedResult))
 			},
+			async "media queries are left alone"() {
+				const tokens = tokenize(`
+					@media screen (max-width: 800px) {
+						header {
+							background: yellow;
+						}
+					}
+				`)
+				const expressions = parse(tokens)
+				const cssBlocks = compile(expressions)
+				const css = [...cssBlocks].join("")
+				const expectedResult = `
+					@media screen (max-width: 800px) {
+						header {
+							background: yellow;
+						}
+					}
+				`
+				expect(strip(css)).equals(strip(expectedResult))
+			},
 			// async "slash-slash comments are stripped away from output"() {
 			// 	const result = strip(camelCss(`
 			// 		// my comment
