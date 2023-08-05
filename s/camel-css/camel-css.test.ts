@@ -160,7 +160,27 @@ export default <Suite>{
 				`
 				expect(strip(css)).equals(strip(expectedResult))
 			},
-			async "media queries are left alone"() {
+			async "nesting works in various circumstances"() {
+				const tokens = tokenize(`
+					header {
+						background: yellow;
+						&:hover { color: red; }
+						& div { color: green; }
+						span { color: blue; }
+					}
+				`)
+				const expressions = parse(tokens)
+				const cssBlocks = compile(expressions)
+				const css = [...cssBlocks].join("")
+				const expectedResult = `
+					header { background: yellow; }
+					header:hover { color: red; }
+					header div { color: green; }
+					header span { color: blue; }
+				`
+				expect(strip(css)).equals(strip(expectedResult))
+			},
+			async "media queries work"() {
 				const tokens = tokenize(`
 					@media screen (max-width: 800px) {
 						header {
@@ -176,6 +196,26 @@ export default <Suite>{
 						header {
 							background: yellow;
 						}
+					}
+				`
+				expect(strip(css)).equals(strip(expectedResult))
+			},
+			async "nesting inside media query"() {
+				const tokens = tokenize(`
+					@media screen (max-width: 800px) {
+						header {
+							background: yellow;
+							&:hover { color: red; }
+						}
+					}
+				`)
+				const expressions = parse(tokens)
+				const cssBlocks = compile(expressions)
+				const css = [...cssBlocks].join("")
+				const expectedResult = `
+					@media screen (max-width: 800px) {
+						header { background: yellow; }
+						header:hover { color: red; }
 					}
 				`
 				expect(strip(css)).equals(strip(expectedResult))
