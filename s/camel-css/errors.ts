@@ -28,9 +28,9 @@ export class CamelCssTraceableError extends CamelCssError {
 	}
 }
 
-export class CamelCssMissingSelectorError extends CamelCssTraceableError {
+export class CamelCssMissingSelectorOrAtRuleError extends CamelCssTraceableError {
 	constructor(trace: Trace) {
-		super(trace, `expression is missing selector`)
+		super(trace, `expression is missing selector (or at-rule)`)
 	}
 }
 
@@ -56,8 +56,8 @@ export const setupTracedErrors = (trace: Trace) => ({
 	error: (message: string) =>
 		new CamelCssTraceableError(trace, message),
 
-	missingSelector: () =>
-		new CamelCssMissingSelectorError(trace),
+	missingSelectorOrAtRule: () =>
+		new CamelCssMissingSelectorOrAtRuleError(trace),
 
 	excessClosingBrace: () =>
 		new CamelCssExcessClosingBraceError(trace),
@@ -68,3 +68,4 @@ export const setupTracedErrors = (trace: Trace) => ({
 	ruleValuePlacement: (ruleValue: string) =>
 		new CamelCssRuleValuePlacementError(trace, ruleValue),
 })
+
