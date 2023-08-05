@@ -28,6 +28,7 @@ export type Lexer<xToken extends Token.Any> =
 export namespace Token {
 
 	export enum Type {
+		AtRule,
 		Open,
 		Close,
 		RuleName,
@@ -38,6 +39,11 @@ export namespace Token {
 	export interface Base {
 		type: Type
 		trace: Trace
+	}
+
+	export interface AtRule extends Base {
+		type: Type.AtRule
+		directive: string
 	}
 
 	export interface Open extends Base {
@@ -65,6 +71,7 @@ export namespace Token {
 	}
 
 	export type Any = (
+		| AtRule
 		| Open
 		| Close
 		| RuleName

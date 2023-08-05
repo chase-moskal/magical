@@ -18,9 +18,12 @@ export function* parse(tokens: Iterable<Token.Any>) {
 		const error = setupTracedErrors(token.trace)
 		switch (token.type) {
 
-			case Token.Type.Open: {
+			case Token.Type.Open:
+			case Token.Type.AtRule: {
 				frame = {
-					selector: token.selector.replaceAll(/\s+/gm, " "),
+					selector: (token.type === Token.Type.AtRule)
+						? token.directive
+						: token.selector.replaceAll(/\s+/gm, " "),
 					ruleName: undefined,
 					rules: {},
 					childFrames: [],
@@ -52,17 +55,25 @@ export function* parse(tokens: Iterable<Token.Any>) {
 					throw error.excessClosingBrace()
 
 				if (!completedFrame.selector)
-					throw error.missingSelector()
+					throw error.missingSelectorOrAtRule()
 
 				if (parentFrame)
 					parentFrame.childFrames.push(completedFrame)
 				else {
 					function recursiveFrameToExpression(frame: StackFrame): Expression {
-						return [
-							frame.selector!,
-							frame.rules,
-							frame.childFrames.map(recursiveFrameToExpression),
-						]
+						if (frame.selector!.startsWith("@")) {
+							return [
+								frame.selector!,
+								frame.childFrames.map(recursiveFrameToExpression),
+							]
+						}
+						else {
+							return [
+								frame.selector!,
+								frame.rules,
+								frame.childFrames.map(recursiveFrameToExpression),
+							]
+						}
 					}
 					yield recursiveFrameToExpression(completedFrame)
 				}
@@ -73,3 +84,4 @@ export function* parse(tokens: Iterable<Token.Any>) {
 	if (stack.length > 0)
 		throw new CamelCssMissingClosingBraceError(stack.length)
 }
+

@@ -1,6 +1,7 @@
 
 import {Suite, expect} from "cynic"
 
+import {Rules} from "./types.js"
 import {camelCss, css} from "./camel-css.js"
 import {compile} from "./compilation/compile.js"
 import {Token} from "./parsing/ordinary/types.js"
@@ -91,14 +92,14 @@ export default <Suite>{
 					const [expression1] = expressions
 					const [selector, rules, children] = expression1
 					expect(selector).equals("header")
-					expect(Object.keys(rules).length).equals(0)
-					expect(children.length).equals(1)
+					expect(Object.keys(rules as Rules).length).equals(0)
+					expect(children!.length).equals(1)
 					{
-						const [child] = children
+						const [child] = children!
 						const [selector, rules, children2] = child
 						expect(selector).equals("h1")
-						expect(Object.keys(rules).length).equals(1)
-						expect(children2.length).equals(0)
+						expect(Object.keys(rules as Rules).length).equals(1)
+						expect(children2!.length).equals(0)
 					}
 				}
 			},
@@ -156,6 +157,66 @@ export default <Suite>{
 				const expectedResult = `
 					header { background: yellow; }
 					header:hover { color: red; }
+				`
+				expect(strip(css)).equals(strip(expectedResult))
+			},
+			async "nesting works in various circumstances"() {
+				const tokens = tokenize(`
+					header {
+						background: yellow;
+						&:hover { color: red; }
+						& div { color: green; }
+						span { color: blue; }
+					}
+				`)
+				const expressions = parse(tokens)
+				const cssBlocks = compile(expressions)
+				const css = [...cssBlocks].join("")
+				const expectedResult = `
+					header { background: yellow; }
+					header:hover { color: red; }
+					header div { color: green; }
+					header span { color: blue; }
+				`
+				expect(strip(css)).equals(strip(expectedResult))
+			},
+			async "media queries work"() {
+				const tokens = tokenize(`
+					@media screen (max-width: 800px) {
+						header {
+							background: yellow;
+						}
+					}
+				`)
+				const expressions = parse(tokens)
+				const cssBlocks = compile(expressions)
+				const css = [...cssBlocks].join("")
+				const expectedResult = `
+					@media screen (max-width: 800px) {
+						header {
+							background: yellow;
+						}
+					}
+				`
+				expect(strip(css)).equals(strip(expectedResult))
+			},
+			async "nesting inside media query"() {
+				const tokens = tokenize(`
+					@media screen (max-width: 800px) {
+						header {
+							background: yellow;
+							&:hover { color: red; }
+						}
+					}
+				`)
+				const expressions = parse(tokens)
+				const cssBlocks = compile(expressions)
+				const css = [...cssBlocks].join("")
+				const expectedResult = `
+					@media screen (max-width: 800px) {
+						header { background: yellow; }
+						header:hover { color: red; }
+					}
 				`
 				expect(strip(css)).equals(strip(expectedResult))
 			},

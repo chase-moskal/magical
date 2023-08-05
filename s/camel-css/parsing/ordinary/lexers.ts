@@ -17,6 +17,19 @@ export const lexers = {
 		}
 	),
 
+	atRule: makeLexer<Token.AtRule>(
+		/(@(?:[^;{]+[;]|[^{]+{))/my,
+		(match, makeTrace) => {
+			const [, directive] = match
+			const trimmedDirective = directive.trim()
+			return {
+				type: Token.Type.AtRule,
+				trace: makeTrace(trimmedDirective.length),
+				directive: trimmedDirective,
+			}
+		}
+	),
+
 	open: makeLexer<Token.Open>(
 		/([^{};]*){/my,
 		(match, makeTrace) => {
@@ -25,7 +38,7 @@ export const lexers = {
 			return {
 				type: Token.Type.Open,
 				trace: makeTrace(trimmedSelector.length),
-				selector: selector.trim(),
+				selector: trimmedSelector,
 			}
 		},
 	),
