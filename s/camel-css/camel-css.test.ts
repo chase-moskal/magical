@@ -6,6 +6,7 @@ import {compile} from "./compilation/compile.js"
 import {Token} from "./parsing/ordinary/types.js"
 import {parse} from "./parsing/ordinary/parse.js"
 import {tokenize} from "./parsing/ordinary/tokenize.js"
+import { Rules } from "./types.js"
 
 /*
 
@@ -69,40 +70,40 @@ export default <Suite>{
 				expect(correct).ok()
 			},
 		},
-		// "parse": {
-		// 	async "flat source code into expressions"() {
-		// 		const tokens = tokenize(`
-		// 			h1 {
-		// 				color: red;
-		// 				text-align: center;
-		// 			}
-		// 			h2 {
-		// 				font-style: italic;
-		// 			}
-		// 		`)
-		// 		const expressions = [...parse(tokens)]
-		// 		expect(expressions.length).equals(2)
-		// 	},
-		// 	async "nested source code into nested expressions"() {
-		// 		const tokens = tokenize(`header { h1 { color: red; } }`)
-		// 		const expressions = [...parse(tokens)]
-		// 		expect(expressions.length).equals(1)
-		// 		{
-		// 			const [expression1] = expressions
-		// 			const [selector, rules, children] = expression1
-		// 			expect(selector).equals("header")
-		// 			expect(Object.keys(rules).length).equals(0)
-		// 			expect(children.length).equals(1)
-		// 			{
-		// 				const [child] = children
-		// 				const [selector, rules, children2] = child
-		// 				expect(selector).equals("h1")
-		// 				expect(Object.keys(rules).length).equals(1)
-		// 				expect(children2.length).equals(0)
-		// 			}
-		// 		}
-		// 	},
-		// },
+		"parse": {
+			async "flat source code into expressions"() {
+				const tokens = tokenize(`
+					h1 {
+						color: red;
+						text-align: center;
+					}
+					h2 {
+						font-style: italic;
+					}
+				`)
+				const expressions = [...parse(tokens)]
+				expect(expressions.length).equals(2)
+			},
+			async "nested source code into nested expressions"() {
+				const tokens = tokenize(`header { h1 { color: red; } }`)
+				const expressions = [...parse(tokens)]
+				expect(expressions.length).equals(1)
+				{
+					const [expression1] = expressions
+					const [selector, rules, children] = expression1
+					expect(selector).equals("header")
+					expect(Object.keys(rules as Rules).length).equals(0)
+					expect(children!.length).equals(1)
+					{
+						const [child] = children!
+						const [selector, rules, children2] = child
+						expect(selector).equals("h1")
+						expect(Object.keys(rules as Rules).length).equals(1)
+						expect(children2!.length).equals(0)
+					}
+				}
+			},
+		},
 		"compile": {
 			async "nested source code emits proper css"() {
 				const tokens = tokenize(`header { h1 { color: red; } }`)
