@@ -1,12 +1,12 @@
 
 import {Suite, expect} from "cynic"
 
+import {Rules} from "./types.js"
 import {camelCss, css} from "./camel-css.js"
 import {compile} from "./compilation/compile.js"
 import {Token} from "./parsing/ordinary/types.js"
 import {parse} from "./parsing/ordinary/parse.js"
 import {tokenize} from "./parsing/ordinary/tokenize.js"
-import { Rules } from "./types.js"
 
 /*
 
