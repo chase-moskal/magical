@@ -180,6 +180,24 @@ export default <Suite>{
 				`
 				expect(strip(css)).equals(strip(expectedResult))
 			},
+			async "nesting with >"() {
+				const tokens = tokenize(`
+					header {
+						background: yellow;
+						> div { color: green; }
+						> span { color: blue; }
+					}
+				`)
+				const expressions = parse(tokens)
+				const cssBlocks = compile(expressions)
+				const css = [...cssBlocks].join("")
+				const expectedResult = `
+					header { background: yellow; }
+					header > div { color: green; }
+					header > span { color: blue; }
+				`
+				expect(strip(css)).equals(strip(expectedResult))
+			},
 			async "media queries work"() {
 				const tokens = tokenize(`
 					@media screen (max-width: 800px) {
